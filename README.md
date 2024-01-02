@@ -10,14 +10,15 @@ Welcome to the PageFlow Library Management System repository! This system provid
 
 ## Technologies
 
-- **Spring Boot**
-- **Hibernate**
-- **PostgreSQL** 
-- **Spring Validation** 
-- **Spring Web** 
-- **Spring Security**
-- **PostgreSQL** 
-- **Lombok**
+- Java
+- Spring Boot
+- Hibernate
+- PostgreSQL 
+- Spring Validation
+- Spring Web
+- Spring Security
+- PostgreSQL 
+- Lombok
 
 ## Prerequisites
 
