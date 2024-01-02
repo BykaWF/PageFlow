@@ -54,3 +54,7 @@ Ensure you have the following software installed on your machine:
    ```bash
    mvn spring-boot:run
 5. Access the application via `http://localhost:8080` in your browser.
+
+### Configuration
+
+For database configurations and other settings, please refer to the `application.properties` file in the `src/main/resources` directory and make necessary adjustments according to your environment.
