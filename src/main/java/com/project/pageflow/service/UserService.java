@@ -11,14 +11,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.project.pageflow.util.Constant.INVALID_USER_TYPE;
+
 @Configuration
 public class UserService implements UserDetailsService {
+    private final UserRepository userRepository;
+    private final   PasswordEncoder passwordEncoder;
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -28,7 +31,7 @@ public class UserService implements UserDetailsService {
     public SecuredUser save(SecuredUser securedUser, String userType) {
         String encryptedPassword = passwordEncoder.encode(securedUser.getPassword());
         String authorities = authoritiesListProvider.getAuthorities(userType);
-        if(authorities.equals(Constant.INVALID_USER_TYPE)) {
+        if(authorities.equals(INVALID_USER_TYPE)) {
             return new SecuredUser();
         }
 

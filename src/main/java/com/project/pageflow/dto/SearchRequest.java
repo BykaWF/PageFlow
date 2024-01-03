@@ -11,10 +11,6 @@ import lombok.*;
 @Builder
 public class SearchRequest {
 
-
-    // List<String> searchKeys = ["authorName", "Genre"]
-    // List<String> searchValues = ["Robert", "Mathematics"]
-
     @NotBlank
     private String searchKey;
 

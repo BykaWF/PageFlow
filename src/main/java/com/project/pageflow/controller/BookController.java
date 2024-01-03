@@ -14,13 +14,6 @@ import java.util.List;
 @RequestMapping("/book")
 
 public class BookController {
-
-    // Adding a book
-
-    /**
-     * Book ---> Author -> map book to the author
-     */
-
     @Autowired
     BookService bookService;
 
@@ -29,7 +22,6 @@ public class BookController {
         bookService.createOrUpdateBook(createBookRequest.toBook());
     }
 
-    //Getting a list of Books
     @GetMapping("/getBooks")
     public List<Book> getBooks(@RequestBody @Valid SearchRequest searchRequest) throws Exception {
         List<Book> list = bookService.findBook(searchRequest.getSearchKey(), searchRequest.getSearchValue());

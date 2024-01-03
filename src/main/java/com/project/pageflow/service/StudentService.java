@@ -42,14 +42,14 @@ public class StudentService {
                 return studentRepository.findStudentByAge(Integer.parseInt(searchValue));
             case "id": {
                 Optional<Student> student = studentRepository.findById(Integer.parseInt(searchValue));
-                if(student.isPresent()) {
-                    return Arrays.asList(student.get());
-                } else {
-                    return new ArrayList<>();
-                }
+                return student.map(Arrays::asList).orElseGet(ArrayList::new);
             } default:
                 throw new Exception("Search key is not valid " + searchKey);
         }
+    }
+
+    public Optional<Student> find(Integer studentId){
+        return studentRepository.findById(studentId);
     }
 
 
