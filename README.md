@@ -2,6 +2,10 @@
 
 Welcome to the PageFlow Library Management System repository! This system provides an efficient way to manage books, user accounts, and borrowing within a library.
 
+## Journal
+
+Implementation  and resolutions in the Journal section for a comprehensive overview of the project [Journal](journal.md).
+
 ## Features
 
 - **User Authentication and Authorization:** Secure access to the system with user roles.
