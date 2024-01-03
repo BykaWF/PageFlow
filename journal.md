@@ -1,4 +1,4 @@
-## Security Implementation Journal
+## Journal
 
 ### Date: [03.01.2024]
 
