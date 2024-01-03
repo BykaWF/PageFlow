@@ -2,22 +2,24 @@
 
 ### Date: [03.01.2024]
 
-#### Objective: Implement robust security measures within the project, including user authentication and authorization.
+### Objective: 
+Ensure strong security for the project, especially regarding user login and access.
 
-#### Challenges Faced:
+### Challenges Faced:
 
-- **"Bad credentials" Error:**
-  - Encountered persistent "Bad credentials" errors during user authentication.
-  - **Resolution:** Investigated the authentication flow, focusing on password encoding and comparison processes. Verified the password encoding algorithm consistency between user registration and authentication. Finally, corrected the encoding algorithm and ensured that stored passwords matched the format expected by the PasswordEncoder.
+1. **"Bad credentials" Error:**
+    - **Problem:** Kept getting errors saying "Bad credentials" when users tried to log in.
+    - **Solution:** Checked how passwords were being checked. Found a mistake in how passwords were being stored and checked. Fixed the issue to ensure passwords were checked properly.
 
-- **Dependency Injection Issues:**
-  - Faced problems with dependency injection within the SecurityConfig class.
-  - **Resolution:** Refactored the SecurityConfig class to utilize constructor injection for UserRepository and PasswordEncoder. Ensured proper initialization and injection of dependencies by annotating the constructor parameters, resolving issues related to null dependencies and misconfiguration.
+2. **Dependency Injection Issues:**
+    - **Problem:** Had trouble making parts of the project talk to each other.
+    - **Solution:** Changed how some parts of the project were set up so they could share information more easily. This fixed the communication problem.
 
-- **Integration of UserDetailsService with UserService:**
-  - **Challenge:** Integrating the UserDetailsService with the UserService while maintaining a connection to the UserRepository.
-  - **Resolution:** Altered the UserService to implement UserDetailsService, allowing it to fetch user details from the UserRepository. Ensured the correct wiring of dependencies by using constructor injection, facilitating a seamless interaction between the services and repository.
+3. **Integration of UserDetailsService with UserService:**
+    - **Challenge:** Needed to connect different parts of the project to handle user information correctly.
+    - **Solution:** Changed a part of the project to work better with another part. Made sure they understood each other properly, which helped manage user details more smoothly.
 
-- **Authentication Failure Investigation:**
-  - **Issue:** Investigated cases of failed authentication despite correct credentials.
-  - **Resolution:** Employed thorough logging and debugging techniques to trace the authentication process. Logged key authentication-related values, such as entered passwords, encoded passwords, and stored hashed passwords, to pinpoint discrepancies. Adjusted password encoding and comparison logic to ensure consistency.
+4. **Authentication Failure Investigation:**
+    - **Issue:** Some users couldn't log in even with the right password.
+    - **Solution:** Checked step by step how users were trying to log in. Found where things were going wrong. Made changes to how passwords were being handled to make sure everything matched up properly.
+
