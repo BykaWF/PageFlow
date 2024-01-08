@@ -23,3 +23,10 @@ Ensure strong security for the project, especially regarding user login and acce
     - **Issue:** Some users couldn't log in even with the right password.
     - **Solution:** Checked step by step how users were trying to log in. Found where things were going wrong. Made changes to how passwords were being handled to make sure everything matched up properly.
 
+### Date: [08.01.2024]
+
+Change to Constructor Dependency Injection:
+
+Reason: After referencing the official Spring framework documentation, opted to switch from using @Autowired annotation to Constructor Dependency Injection for improved code readability, testability, and reduced coupling.
+Impact: This change enhances and ensures better management of dependencies, based on practices recommended by Spring.
+
