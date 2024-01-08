@@ -15,7 +15,7 @@ import java.util.Optional;
 public class StudentService {
 
     private final StudentRepository studentRepository;
-    private  final UserService userService;
+    private final UserService userService;
 
     public StudentService(StudentRepository studentRepository, UserService userService) {
         this.studentRepository = studentRepository;

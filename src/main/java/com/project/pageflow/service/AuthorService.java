@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorService {
 
-    @Autowired
-    AuthorRepository authorRepository;
+
+    private final AuthorRepository authorRepository;
+
+    public AuthorService(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
+    }
 
     public Author getOrCreate(Author author) {
         Author existingAuthor = authorRepository.findByEmail(author.getEmail());

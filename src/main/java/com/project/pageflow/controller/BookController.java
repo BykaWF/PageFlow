@@ -14,8 +14,13 @@ import java.util.List;
 @RequestMapping("/book")
 
 public class BookController {
-    @Autowired
-    BookService bookService;
+
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
 
     @PostMapping("/book")
     public void createBook(@RequestBody @Valid CreateBookRequest createBookRequest) {

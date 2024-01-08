@@ -14,12 +14,13 @@ import java.util.Optional;
 
 @Service
 public class BookService {
+    private final AuthorService authorService;
+    private final BookRepository bookRepository;
 
-    @Autowired
-    AuthorService authorService;
-
-    @Autowired
-    BookRepository bookRepository;
+    public BookService(AuthorService authorService, BookRepository bookRepository) {
+        this.authorService = authorService;
+        this.bookRepository = bookRepository;
+    }
 
     public void createOrUpdateBook(Book book) {
 

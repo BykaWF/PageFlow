@@ -16,23 +16,25 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class TransactionService {
 
-    @Autowired
-    StudentService studentService;
 
-    @Autowired
-    BookService bookService;
+    private final StudentService studentService;
+    private final BookService bookService;
+    private final AdminService adminService;
 
-    @Autowired
-    AdminService adminService;
-
-    @Autowired
-    TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
 
     @Value("${student.allowed.max-books}") // application.properties
     Integer maxBooksAllowed;
 
     @Value("${student.allowed.duration}") // application.properties
     Integer allowedDuration;
+
+    public TransactionService(StudentService studentService, BookService bookService, AdminService adminService, TransactionRepository transactionRepository) {
+        this.studentService = studentService;
+        this.bookService = bookService;
+        this.adminService = adminService;
+        this.transactionRepository = transactionRepository;
+    }
 
     public String initiateTransaction(InitiateTransactionRequest initiateTransactionRequest) throws Exception {
         return initiateTransactionRequest.getTransactionType() == TransactionType.RETURN
