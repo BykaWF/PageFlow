@@ -62,3 +62,6 @@ Ensure you have the following software installed on your machine:
 ### Configuration
 
 For database configurations and other settings, please refer to the `application.properties` file in the `src/main/resources` directory and make necessary adjustments according to your environment.
+
+### API Test Video Demonstration
+This video demonstrates the process of testing Student Controller APIs using Postman [Student Controller](https://youtu.be/_eyT2dUtHCA)
