@@ -21,7 +21,6 @@ Implementation  and resolutions in the Journal section for a comprehensive overv
 - Spring Validation
 - Spring Web
 - Spring Security
-- PostgreSQL 
 - Lombok
 
 ## Prerequisites
