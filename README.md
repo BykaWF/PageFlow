@@ -62,5 +62,9 @@ Ensure you have the following software installed on your machine:
 
 For database configurations and other settings, please refer to the `application.properties` file in the `src/main/resources` directory and make necessary adjustments according to your environment.
 
+## Frequently Asked Questions (FAQ)
+
+For commonly asked questions and troubleshooting tips, refer to our [FAQ section](https://github.com/BykaWF/PageFlow/wiki/F.A.Q).
+
 ### API Test Video Demonstration
 This video demonstrates the process of testing Student Controller APIs using Postman [Student Controller](https://youtu.be/_eyT2dUtHCA)
