@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.project.pageflow.util.Constant.STUDENT_USER;
+
 @Service
 public class StudentService {
 
@@ -24,7 +26,7 @@ public class StudentService {
 
     public void createStudent(Student student) {
         SecuredUser securedUser = student.getSecuredUser();
-        securedUser = userService.save(securedUser, Constant.STUDENT_USER);
+        securedUser = userService.save(securedUser, STUDENT_USER);
 
         student.setSecuredUser(securedUser);
         studentRepository.save(student);

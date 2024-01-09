@@ -10,13 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class TransactionService {
-
-
     private final StudentService studentService;
     private final BookService bookService;
     private final AdminService adminService;
@@ -53,15 +52,15 @@ public class TransactionService {
      */
     private String issueBook(InitiateTransactionRequest initiateTransactionRequest) throws Exception {
         List<Student> studentList = studentService.findStudent("rollNumber", initiateTransactionRequest.getStudentRollNumber());
-        Student student = studentList.size() > 0 ? studentList.get(0) : null;
+        Student student = !studentList.isEmpty() ? studentList.getFirst() : null;
 
         List<Book> bookList = bookService.findBook("id", String.valueOf(initiateTransactionRequest.getBookId()));
-        Book book = bookList.size() > 0 ? bookList.get(0) : null;
+        Book book = !bookList.isEmpty() ? bookList.getFirst() : null;
 
-        Admin admin = adminService.find(initiateTransactionRequest.getAdminId());
+        Optional<Admin> admin = adminService.find(initiateTransactionRequest.getAdminId());
 
         // 1. Validate the request
-        if(student == null || book == null || admin == null) {
+        if(student == null || book == null || admin.isEmpty()) {
             throw new Exception("Invalid Request");
         }
 
@@ -81,7 +80,7 @@ public class TransactionService {
                     .transactionId(UUID.randomUUID().toString())
                     .student(student)
                     .book(book)
-                    .admin(admin)
+                    .admin(admin.get())
                     .transactionStatus(TransactionStatus.PENDING)
                     .transactionType(TransactionType.ISSUE)
                     .build();
@@ -112,15 +111,15 @@ public class TransactionService {
      */
     private String returnBook(InitiateTransactionRequest initiateTransactionRequest) throws Exception {
         List<Student> studentList = studentService.findStudent("rollNumber", initiateTransactionRequest.getStudentRollNumber());
-        Student student = studentList.size() > 0 ? studentList.get(0) : null;
+        Student student = !studentList.isEmpty() ? studentList.getFirst() : null;
 
         List<Book> bookList = bookService.findBook("id", String.valueOf(initiateTransactionRequest.getBookId()));
-        Book book = bookList.size() > 0 ? bookList.get(0) : null;
+        Book book = !bookList.isEmpty() ? bookList.getFirst() : null;
 
-        Admin admin = adminService.find(initiateTransactionRequest.getAdminId());
+        Optional<Admin> admin = adminService.find(initiateTransactionRequest.getAdminId());
 
         // 1. Validate the request
-        if(student == null || book == null || admin == null) {
+        if(student == null || book == null || admin.isEmpty()) {
             throw new Exception("Invalid Request");
         }
 
@@ -142,7 +141,7 @@ public class TransactionService {
                     .transactionId(UUID.randomUUID().toString())
                     .transactionType(initiateTransactionRequest.getTransactionType())
                     .transactionStatus(TransactionStatus.PENDING)
-                    .admin(admin)
+                    .admin(admin.get())
                     .book(book)
                     .student(student)
                     .fine(fine)
