@@ -1,43 +1,53 @@
+/**
+ * StudentController is a REST controller responsible for handling student-related endpoints.
+ */
 package com.project.pageflow.controller;
 
-import com.project.pageflow.dto.CreateStudentRequest;
-import com.project.pageflow.dto.SearchRequest;
+import com.project.pageflow.confing.jwt.TokenProvider;
+import com.project.pageflow.dto.StudentInfoResponse;
 import com.project.pageflow.models.SecuredUser;
 import com.project.pageflow.models.Student;
-import com.project.pageflow.service.StudentService;
-import jakarta.validation.Valid;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.project.pageflow.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/api/v1/student")
 public class StudentController {
-    private final StudentService studentService;
+    private TokenProvider tokenProvider;
+    private UserService userService;
 
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
+    /**
+     * Constructs a StudentController instance with the required dependencies.
+     * @param tokenProvider The TokenProvider instance.
+     * @param userService The UserService instance.
+     */
+    @Autowired
+    public StudentController(TokenProvider tokenProvider, UserService userService) {
+        this.tokenProvider = tokenProvider;
+        this.userService = userService;
     }
 
-    @PostMapping("/create") // for admin
-    public void createStudent(@RequestBody @Valid CreateStudentRequest createStudentRequest) {
-        studentService.createStudent(createStudentRequest.toStudent());
-    }
+    /**
+     * Endpoint to retrieve information about the currently authenticated student.
+     * @param authorization The JWT token in the Authorization header.
+     * @return ResponseEntity with the student information response.
+     */
+    @GetMapping("/info")
+    public ResponseEntity<?> getInfoAboutStudent(@RequestHeader("Authorization") String authorization){
+        String username = tokenProvider.getUsername(authorization.substring(7));
+        SecuredUser user = (SecuredUser) userService.loadUserByUsername(username);
+        Student student = user.getStudent();
 
-    @GetMapping("/getInfo") //only for a student to view their info
-    public List<Student> findStudent(@RequestBody @Valid SearchRequest searchRequest) throws Exception {
-        return studentService.findStudent(searchRequest.getSearchKey(), searchRequest.getSearchValue());
-    }
+        StudentInfoResponse studentInfoResponse = new StudentInfoResponse();
+        studentInfoResponse.setName(student.getName());
+        studentInfoResponse.setEmail(student.getEmail());
+        studentInfoResponse.setRollNumber(student.getRollNumber());
 
-    @GetMapping("/profile")
-    public Optional<Student> findStudent() throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SecuredUser user = (SecuredUser) authentication.getPrincipal();
-        Integer studentId = user.getStudent().getId();
-        return studentService.find(studentId);
+        return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
     }
-
 }
