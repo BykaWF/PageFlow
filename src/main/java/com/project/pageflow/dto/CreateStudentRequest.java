@@ -6,7 +6,6 @@ import com.project.pageflow.models.SecuredUser;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Setter
@@ -32,6 +31,7 @@ public class CreateStudentRequest {
 
     @NotBlank
     private String password;
+    
     public Student toStudent() {
       SecuredUser securedUser = SecuredUser.builder()
               .username(this.username)

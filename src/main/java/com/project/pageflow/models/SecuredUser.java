@@ -7,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -15,9 +17,9 @@ import static com.project.pageflow.util.Constant.DELIMITER;
 @Entity
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class SecuredUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +31,11 @@ public class SecuredUser implements UserDetails {
     private String authorities;
 
     @OneToOne(mappedBy = "securedUser")
+    @JsonIgnoreProperties("securedUser")
     private Student student;
 
     @OneToOne(mappedBy = "securedUser")
+    @JsonIgnoreProperties("securedUser")
     private Admin admin;
 
     @Override
