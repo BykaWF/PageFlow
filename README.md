@@ -22,6 +22,8 @@ Implementation  and resolutions in the Journal section for a comprehensive overv
 - Spring Web
 - Spring Security
 - Lombok
+- JWT Token
+- JavaScript
 
 ## Prerequisites
 
