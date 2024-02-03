@@ -42,7 +42,7 @@ Ensure you have the following software installed on your machine:
   > Ensure PostgreSQL is running and accessible. You might need to configure the database details in `application.properties` before starting the application.
 
 
-## Getting Started
+## Getting Started (Backend)
 
 1. Clone this repository.
    ```bash
