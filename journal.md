@@ -2,11 +2,6 @@
 
 ### Date: 03.01.2024
 
-### Objective: 
-Ensure strong security for the project, especially regarding user login and access.
-
-### Challenges Faced:
-
 1. **"Bad credentials" Error:**
     - **Problem:** Kept getting errors saying "Bad credentials" when users tried to log in.
     - **Solution:** Checked how passwords were being checked. Found a mistake in how passwords were being stored and checked. Fixed the issue to ensure passwords were checked properly.
