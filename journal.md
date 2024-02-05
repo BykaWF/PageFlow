@@ -30,3 +30,19 @@ Change to Constructor Dependency Injection:
  - **Reason**: After referencing the official Spring framework documentation, opted to switch from using @Autowired annotation to Constructor Dependency Injection for improved code readability, testability, and reduced coupling.
  - **Impact**: This change enhances and ensures better management of dependencies, based on practices recommended by Spring.
 
+### Date: 5.02.2024
+
+1. **Authentication Failure Investigation**:
+
+    - **Issue**: Some users couldn't log in even with the right password.
+    - **Solution**: Checked step by step how users were trying to log in. Found where things were going wrong. Made changes to how passwords were being handled to make sure everything matched up properly.
+
+2. **Connection between Frontend and Backend**:
+
+    - **Challenge**: Integrating frontend developed using JavaScript, HTML, CSS, and Bootstrap with backend functionalities.
+    - **Solution**: Implemented RESTful APIs to facilitate communication between the frontend and backend components, ensuring seamless data exchange.
+
+3. **Added JWT Token Authentication**:
+
+    - **Challenge**: Enhancing security by implementing JWT token authentication for user sessions.
+    - **Solution**: Integrated JWT token authentication mechanism into the backend, allowing secure user authentication and authorization processes.
