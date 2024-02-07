@@ -22,8 +22,7 @@ Implementation  and resolutions in the Journal section for a comprehensive overv
 - Spring Web
 - Spring Security
 - Lombok
-- JWT Token
-- JavaScript
+- Themleaf
 
 ## Prerequisites
 
@@ -42,7 +41,7 @@ Ensure you have the following software installed on your machine:
   > Ensure PostgreSQL is running and accessible. You might need to configure the database details in `application.properties` before starting the application.
 
 
-## Getting Started (Backend)
+## Getting Started
 
 1. Clone this repository.
    ```bash
