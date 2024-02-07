@@ -3,18 +3,11 @@
  */
 package com.project.pageflow.confing;
 
-import com.project.pageflow.confing.jwt.JwtEntryPoint;
-import com.project.pageflow.confing.jwt.JwtFilter;
-import com.project.pageflow.confing.jwt.TokenProvider;
 import com.project.pageflow.repository.UserRepository;
 import com.project.pageflow.service.UserService;
-import io.jsonwebtoken.Jwt;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -23,24 +16,16 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,20 +35,13 @@ import static com.project.pageflow.util.Constant.*;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
-    private final JwtEntryPoint jwtEntryPoint;
     private final UserRepository userRepository;
-    @Value("${jwt.secret-key}")
-    private String SECRET_KEY;
 
     /**
      * Constructs a SecurityConfig instance with JwtEntryPoint and UserRepository dependencies.
-     * @param jwtEntryPoint The JwtEntryPoint instance.
      * @param userRepository The UserRepository instance.
      */
-
-    public SecurityConfig(JwtEntryPoint jwtEntryPoint, UserRepository userRepository) {
-        this.jwtEntryPoint = jwtEntryPoint;
+    public SecurityConfig(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -78,19 +56,32 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/api/v1/auth/*").permitAll()
+                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/sing-up").permitAll()
+                                .requestMatchers("/static/**").permitAll()
+                                .requestMatchers("/library").authenticated()
+                                .requestMatchers("/student-info").authenticated()
                                 .requestMatchers("/api/v1/student/info").hasAuthority(STUDENT_SELF_INFO_AUTHORITY)
                                 .requestMatchers("/admin/**").hasAuthority(CREATE_ADMIN_AUTHORITY)
                                 .requestMatchers("/profile").hasAuthority(STUDENT_SELF_INFO_AUTHORITY)
-                                .requestMatchers("/book/**").hasAuthority(CREATE_BOOK_AUTHORITY)
+                                .requestMatchers("/book/**").permitAll()
                                 .requestMatchers("/transaction/**").hasAuthority(INITIATE_TRANSACTION_AUTHORITY)
                 )
-                .addFilterBefore(jwtFilter(),UsernamePasswordAuthenticationFilter.class)
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/library",true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                )
                 .build();
     }
 
@@ -102,26 +93,6 @@ public class SecurityConfig {
     @Bean
     public UserService userService(){
         return new UserService(userRepository,passwordEncoder());
-    }
-
-    /**
-     * Configures and initializes the TokenProvider bean.
-     *
-     * @return An instance of the TokenProvider.
-     */
-    @Bean
-    public TokenProvider tokenProvider(){
-        return new TokenProvider();
-    }
-
-    /**
-     * Configures and initializes the JwtFilter bean.
-     *
-     * @return An instance of the JwtFilter initialized with TokenProvider and UserService.
-     */
-    @Bean
-    public JwtFilter jwtFilter(){
-        return new JwtFilter(tokenProvider(),userService());
     }
 
     /**
@@ -165,28 +136,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Defines the CORS filter bean.
-     * @return A CorsFilter instance.
-     */
     @Bean
-    public CorsFilter corsFilter() {
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:8080"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://127.0.0.1:5500")); // Add your frontend origin here
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
-    /**
-     * Defines the secret key bean for JWT token operations.
-     * @return A SecretKey instance.
-     */
-    @Bean
-    public SecretKey setKey(){
-        byte[] decodedKey = java.util.Base64.getDecoder().decode(SECRET_KEY);
-        return new SecretKeySpec(decodedKey,0,decodedKey.length,"HMACSHA256");
-    }
 }

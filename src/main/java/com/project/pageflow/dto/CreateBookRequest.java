@@ -16,10 +16,19 @@ import lombok.*;
 public class CreateBookRequest {
 
     @NotBlank
-    private String name;
+    private String title;
+
+    @NotNull
+    private Boolean isAvailable;
 
     @NotNull
     private Genre genre;
+
+    @NotBlank
+    private String discription;
+
+    @NotBlank
+    private String imgURL;
 
     @NotBlank
     private String authorName;
@@ -35,7 +44,10 @@ public class CreateBookRequest {
                 .build();
 
         return Book.builder()
-                .name(this.name)
+                .title(this.title)
+                .discription(this.discription)
+                .imgURL(this.imgURL)
+                .isAvaliable(this.isAvailable)
                 .genre(this.genre)
                 .book_author(author)
                 .build();

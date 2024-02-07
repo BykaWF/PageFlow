@@ -1,0 +1,32 @@
+<!-- registration-success.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Success</title>
+    <link th:href="@{styles/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<section class="container">
+    <div class="login-container">
+
+        <div class="circle circle-one"></div>
+        <div class="form-container">
+            <h2 class="opacity">Registration Successful!</h2>
+            <p class="opacity">Your account has been created successfully.</p>
+            <button onclick="redirectToLogin()" class="opacity" >OK</button>
+        </div>
+        <div class="circle circle-two"></div>
+    </div>
+    <script>
+
+        function redirectToLogin(){
+            window.location.href='/login';
+        }
+    </script>
+
+    <div class="theme-btn-container"></div>
+</section>
+</body>
+</html>

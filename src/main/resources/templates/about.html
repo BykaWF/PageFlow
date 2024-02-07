@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>PAGE&FLOW</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{styles/styles-bot.css}" rel="stylesheet" />
+</head>
+<body class="d-flex flex-column">
+<main class="flex-shrink-0">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container px-5">
+            <a class="navbar-brand" href="/">PAGE&FLOW</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://yaprozorov.super.site/">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Header-->
+    <header class="py-5">
+        <div class="container px-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-xxl-6">
+                    <div class="text-center my-5">
+                        <h1 class="fw-bolder mb-3">Our mission is to make library management system easier for everyone.</h1>
+                        <p class="lead fw-normal text-muted mb-4">PAGE&FLOW was built on the idea that quality, functional library management should be available to everyone. Use our open source, free product, or support us by buying us coffee.</p>
+                        <a class="btn btn-primary btn-lg" href="#scroll-target">Read our story</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- About section one-->
+    <section class="py-5 bg-light" id="scroll-target">
+        <div class="container px-5 my-5">
+            <div class="row gx-5 align-items-center">
+                <div class="col-lg-6"><img class="img-fluid rounded mb-5 mb-lg-0" th:src="@{images/founder.jpg}" alt="..." /></div>
+                <div class="col-lg-6">
+                    <h2 class="fw-bolder">Founder</h2>
+                    <p class="lead fw-normal text-muted mb-0">As the founder of PAGE&FLOW, I'm a tech lover and Java enthusiast on a mission to build a brand that reflects my passion for innovation. Join me in this adventure, where technology meets literature, and let's redefine library management together!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About section two-->
+    <section class="py-5">
+        <div class="container px-5 my-5">
+            <div class="row gx-5 align-items-center">
+                <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" th:src="@{images/founder-mindset.jpg}" alt="..." /></div>
+                <div class="col-lg-6">
+                    <h2 class="fw-bolder">Growth &amp; beyond</h2>
+                    <p class="lead fw-normal text-muted mb-0">PAGE&FLOW is committed to accessible and inclusive library management, offering a free, open-source solution for all. Fueled by a vibrant community, voluntary support ensures sustained development and user-centric design, providing a seamless and enjoyable experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Team members section-->
+</main>
+<!-- Footer-->
+<footer class="bg-dark py-4 mt-auto">
+    <div class="container px-5">
+        <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+            <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; PAGE&FLOW 2024</div></div>
+        </div>
+    </div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<!--<script th:src="@{scripts/main.js}" type="module"></script>-->
+</body>
+</html>

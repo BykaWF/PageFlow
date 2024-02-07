@@ -19,7 +19,10 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    private String title;
+    private Boolean isAvaliable;
+    private String discription;
+    private String imgURL;
 
     @ManyToOne
     @JoinColumn

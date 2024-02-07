@@ -2,9 +2,9 @@ package com.project.pageflow.models;
 
 public enum Genre {
 
-    FICTIONAL, //0
-    NON_FICTIONAL, // 1
-    HISTORY, // 2
+    FICTIONAL,
+    NON_FICTIONAL,
+    HISTORY,
     FINANCE,
     PROGRAMMING,
     ENGINEERING,

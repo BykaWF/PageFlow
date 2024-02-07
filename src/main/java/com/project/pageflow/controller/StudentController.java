@@ -3,51 +3,57 @@
  */
 package com.project.pageflow.controller;
 
-import com.project.pageflow.confing.jwt.TokenProvider;
+
 import com.project.pageflow.dto.StudentInfoResponse;
 import com.project.pageflow.models.SecuredUser;
 import com.project.pageflow.models.Student;
 import com.project.pageflow.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
-@RestController
-@RequestMapping("/api/v1/student")
+import java.util.Collection;
+
+@AllArgsConstructor
+@Controller
 public class StudentController {
-    private TokenProvider tokenProvider;
+
     private UserService userService;
 
     /**
-     * Constructs a StudentController instance with the required dependencies.
-     * @param tokenProvider The TokenProvider instance.
-     * @param userService The UserService instance.
-     */
-    @Autowired
-    public StudentController(TokenProvider tokenProvider, UserService userService) {
-        this.tokenProvider = tokenProvider;
-        this.userService = userService;
-    }
-
-    /**
      * Endpoint to retrieve information about the currently authenticated student.
-     * @param authorization The JWT token in the Authorization header.
      * @return ResponseEntity with the student information response.
      */
-    @GetMapping("/info")
-    public ResponseEntity<?> getInfoAboutStudent(@RequestHeader("Authorization") String authorization){
-        String username = tokenProvider.getUsername(authorization.substring(7));
-        SecuredUser user = (SecuredUser) userService.loadUserByUsername(username);
-        Student student = user.getStudent();
+    @GetMapping("/student-info")
+    @PreAuthorize("isAuthenticated()")
+    public String getInfoAboutStudent(Model model, Authentication authentication){
+        Object principal = authentication.getPrincipal();
+        if(principal instanceof SecuredUser){
+            try {
+                UserDetails userDetails = (UserDetails) principal;
+                String username = userDetails.getUsername();
+                SecuredUser user = (SecuredUser) userService.loadUserByUsername(username);
+                Student student = user.getStudent();
+                model.addAttribute("student",student);
+                return "student-info";
+            } catch (BadCredentialsException e){
+                model.addAttribute("BadCredentials", e);
+                return "login";
+            }
+        }else {
+            return "login";
+        }
 
-        StudentInfoResponse studentInfoResponse = new StudentInfoResponse();
-        studentInfoResponse.setName(student.getName());
-        studentInfoResponse.setEmail(student.getEmail());
-        studentInfoResponse.setRollNumber(student.getRollNumber());
-
-        return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
     }
 }
