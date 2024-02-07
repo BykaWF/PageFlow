@@ -1,18 +1,17 @@
 package com.project.pageflow.controller;
 
-import com.project.pageflow.dto.CreateBookRequest;
-import com.project.pageflow.dto.SearchRequest;
 import com.project.pageflow.models.Book;
 import com.project.pageflow.service.BookService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-@RestController
-@RequestMapping("/book")
 
+@Controller
 public class BookController {
 
     private final BookService bookService;
@@ -22,14 +21,30 @@ public class BookController {
     }
 
 
-    @PostMapping("/book")
-    public void createBook(@RequestBody @Valid CreateBookRequest createBookRequest) {
-        bookService.createOrUpdateBook(createBookRequest.toBook());
+    @GetMapping("/library")
+    @PreAuthorize("isAuthenticated()")
+    public String getLibraryPage(Model model){
+
+        List<Book> bookList = bookService.getAll();
+        model.addAttribute("books", bookList);
+
+        return "library";
     }
 
-    @GetMapping("/getBooks")
-    public List<Book> getBooks(@RequestBody @Valid SearchRequest searchRequest) throws Exception {
-        List<Book> list = bookService.findBook(searchRequest.getSearchKey(), searchRequest.getSearchValue());
-        return list;
+    @GetMapping("/book/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String getBookItem(@PathVariable("id") Integer id, Model model){
+        Optional<Book> bookOptional = bookService.getById(id);
+
+        if(bookOptional.isPresent()){
+            Book book = bookOptional.get();
+            model.addAttribute("book",book);
+            model.addAttribute("message", "book fetched");
+            return "book";
+        }else{
+            model.addAttribute("error", "book error");
+            return "library";
+        }
     }
+
 }

@@ -1,15 +1,10 @@
-<---- High Priority ---->
-Library backend
-
+5.02.2024:
 <---- TO DO ---->
+Search engine
+Add related books based on genre
+Transaction of book and you can see as a student your own transactions
+Student add transaction table
 Admin profile
 Admin backend
 
-<---- DONE ---->
-Solve problem with JwtFilter
-JWT Auth
-Security web site, one for auth another for non-auth.
-Contact page backend
-Profile - V
-Profile backend - V
-Icons - V
+

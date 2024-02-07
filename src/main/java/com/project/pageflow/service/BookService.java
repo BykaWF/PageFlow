@@ -4,7 +4,6 @@ import com.project.pageflow.models.Author;
 import com.project.pageflow.models.Book;
 import com.project.pageflow.models.Genre;
 import com.project.pageflow.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,10 +35,14 @@ public class BookService {
         bookRepository.save(book);
     }
 
+    public List<Book> getAll(){
+        return bookRepository.findAll();
+    }
+
     public List<Book> findBook(String searchKey, String searchValue) throws Exception {
         switch (searchKey) {
             case "name":
-                return bookRepository.findByName(searchValue);
+                return bookRepository.findByTitle(searchValue);
             case "author_name":
                 return bookRepository.findByAuthor_Name(searchValue);
             case "genre":
@@ -56,4 +59,7 @@ public class BookService {
         }
     }
 
+    public Optional<Book> getById(Integer id) {
+        return bookRepository.findById(id);
+    }
 }

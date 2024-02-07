@@ -9,9 +9,9 @@ public class Constant {
     public static final String CREATE_BOOK_AUTHORITY = "CREATE_BOOK";
     public static final String CREATE_ADMIN_AUTHORITY = "CREATE_ADMIN";
     public static final String INITIATE_TRANSACTION_AUTHORITY = "INITIATE_TRANSACTION";
-    private static final long EXPIRATION_DATE_JWT = 300_000;
+    private static final int EXPIRATION_DATE_JWT = 300_000;
 
-    public static long getExpirationDateJwt(){
+    public static int getExpirationDateJwt(){
         return EXPIRATION_DATE_JWT;
     }
 }
