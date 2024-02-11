@@ -64,11 +64,6 @@ public class SecurityConfig {
                                 .requestMatchers("/static/**").permitAll()
                                 .requestMatchers("/library").authenticated()
                                 .requestMatchers("/student-info").authenticated()
-                                .requestMatchers("/api/v1/student/info").hasAuthority(STUDENT_SELF_INFO_AUTHORITY)
-                                .requestMatchers("/admin/**").hasAuthority(CREATE_ADMIN_AUTHORITY)
-                                .requestMatchers("/profile").hasAuthority(STUDENT_SELF_INFO_AUTHORITY)
-                                .requestMatchers("/book/**").permitAll()
-                                .requestMatchers("/transaction/**").hasAuthority(INITIATE_TRANSACTION_AUTHORITY)
                 )
                 .formLogin(login -> login
                         .loginPage("/login")

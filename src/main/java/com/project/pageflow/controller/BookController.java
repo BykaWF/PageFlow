@@ -47,4 +47,18 @@ public class BookController {
         }
     }
 
+    @GetMapping("/book/search")
+    @PreAuthorize("isAuthenticated()")
+    public String getBooksFromSearchBar(@RequestParam("query") String query, Model model){
+
+        List<Book> fromSearchBar = bookService.getFromSearchBar(query);
+        model.addAttribute("searchBar", fromSearchBar);
+
+        if(fromSearchBar.isEmpty()){
+            model.addAttribute("message","Book is not found");
+        }
+
+        return "search-book";
+    }
+
 }

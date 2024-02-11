@@ -1,6 +1,9 @@
-5.02.2024:
+11.02.2024:
 <---- TO DO ---->
-Search engine
+Search engine - V -> if not found add message and show to user - V
+
+Add feature that gives opportunity to user buy a book and see this book in own information and check a limit books
+
 Add related books based on genre
 Transaction of book and you can see as a student your own transactions
 Student add transaction table
