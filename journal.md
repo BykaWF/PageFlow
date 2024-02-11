@@ -41,3 +41,10 @@ Change to Constructor Dependency Injection:
 
     - **Challenge**: Enhancing security by implementing JWT token authentication for user sessions.
     - **Solution**: Integrated JWT token authentication mechanism into the backend, allowing secure user authentication and authorization processes.
+  
+### Date: 11.02.2024
+
+Added search-book.html with a search engine using PostgreSQL Full Text:
+
+   - **Challenge**: Implementing a search functionality for books.
+   - **Solution**: Created search-book.html and implemented a search engine using PostgreSQL Full Text search for efficient book searching.
