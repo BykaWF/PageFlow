@@ -66,6 +66,3 @@ For database configurations and other settings, please refer to the `application
 ## Frequently Asked Questions (FAQ)
 
 For commonly asked questions and troubleshooting tips, refer to our [FAQ section](https://github.com/BykaWF/PageFlow/wiki/F.A.Q).
-
-### API Test Video Demonstration
-This video demonstrates the process of testing Student Controller APIs using Postman [Student Controller](https://youtu.be/_eyT2dUtHCA)
