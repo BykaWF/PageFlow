@@ -11,7 +11,7 @@
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link th:href="@{styles/styles-bot.css}" rel="stylesheet" />
+    <link th:href="@{/styles/styles-bot.css}" rel="stylesheet" />
 </head>
 <body>
 <!-- Navigation-->
@@ -50,7 +50,7 @@
                     <!-- Search widget-->
                     <div class="card mb-4">
                         <div class="align-content-center">
-                            <form th:action="@{/book/search}" method="get">
+                            <form th:action="@{/book/search(param1='query')}" method="get">
                                 <div class="input-group">
                                     <input class="form-control" type="text" placeholder="Search PAGE&FLOW" aria-label="Enter search term..." aria-describedby="button-search" name="query" />
                                     <div class="text-center">
@@ -62,11 +62,15 @@
                             </form>
                         </div>
                     </div>
-
+                    <!-- Alert message -->
+                    <div th:if="${searchBar.isEmpty()}" class="alert alert-warning text-center mb-4" role="alert">
+                        <span th:text="${message}"></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 
 </header>
 <!-- Section-->
@@ -74,7 +78,7 @@
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             <!-- Iterate over the list of books -->
-            <div th:each="book : ${books}" class="col mb-5">
+            <div th:each="book : ${searchBar}" class="col mb-5">
                 <div class="card h-100">
                     <!-- Product image-->
                     <img class="card-img-top" th:src="${book.imgURL}" alt="Book Cover" />
@@ -99,11 +103,12 @@
 
 
 <!-- Footer-->
-<footer class="py-5 bg-dark">
+<footer class="py-3 bg-dark fixed-bottom">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; PAGE&FLOW 2024</p>
+        <p class="m-0 text-center text-white small">Copyright &copy; PAGE&FLOW 2024</p>
     </div>
 </footer>
+
 
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
