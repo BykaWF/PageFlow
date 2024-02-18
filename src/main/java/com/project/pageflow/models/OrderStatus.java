@@ -1,5 +1,5 @@
 package com.project.pageflow.models;
 
-public enum TransactionStatus {
+public enum OrderStatus {
     PENDING, SUCCESS, FAILURE
 }

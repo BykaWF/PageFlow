@@ -4,8 +4,9 @@
 package com.project.pageflow.confing;
 
 import com.project.pageflow.repository.UserRepository;
+import com.project.pageflow.service.ShoppingSessionService;
 import com.project.pageflow.service.UserService;
-import org.apache.catalina.filters.CorsFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,21 +30,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.project.pageflow.util.Constant.*;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@AllArgsConstructor
 public class SecurityConfig {
     private final UserRepository userRepository;
-
-    /**
-     * Constructs a SecurityConfig instance with JwtEntryPoint and UserRepository dependencies.
-     * @param userRepository The UserRepository instance.
-     */
-    public SecurityConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final ShoppingSessionService shoppingSessionService;
 
     /**
      * Defines the security filter chain for HTTP security configurations.
@@ -59,15 +52,18 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth ->
                         auth
+                                .requestMatchers("/api/shop/**").permitAll()
                                 .requestMatchers("/**").permitAll()
                                 .requestMatchers("/sing-up").permitAll()
                                 .requestMatchers("/static/**").permitAll()
                                 .requestMatchers("/library").authenticated()
                                 .requestMatchers("/student-info").authenticated()
+
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
                         .defaultSuccessUrl("/library",true)
+                        .successHandler(shoppingSessionSuccessHandler())
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -79,6 +75,12 @@ public class SecurityConfig {
                 )
                 .build();
     }
+    @Bean
+    public  ShoppingSessionSuccessHandler shoppingSessionSuccessHandler(){
+        return new ShoppingSessionSuccessHandler(shoppingSessionService,userService());
+    }
+
+
 
     /**
      * Configures and initializes the UserService bean.

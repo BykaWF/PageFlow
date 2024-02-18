@@ -20,13 +20,10 @@ public class Transaction {
     private String transactionId;
 
     @Enumerated(value = EnumType.STRING)
-    private TransactionType transactionType;
+    private OrderType orderType;
 
     @Enumerated(value = EnumType.STRING)
-    private TransactionStatus transactionStatus;
-
-    @CreationTimestamp
-    private Date createdOn;
+    private OrderStatus orderStatus;
 
     private Integer fine;
 
@@ -34,7 +31,7 @@ public class Transaction {
     @ManyToOne
     private Book book;
 
-    @JoinColumn
+    @JoinColumn(name = "stud_id")
     @ManyToOne
     private Student student;
 
@@ -42,4 +39,6 @@ public class Transaction {
     @ManyToOne
     private Admin admin;
 
+    @CreationTimestamp
+    private Date createdOn;
 }

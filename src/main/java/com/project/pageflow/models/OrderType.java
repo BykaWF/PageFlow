@@ -1,5 +1,5 @@
 package com.project.pageflow.models;
 
-public enum TransactionType {
+public enum OrderType {
     ISSUE, RETURN
 }

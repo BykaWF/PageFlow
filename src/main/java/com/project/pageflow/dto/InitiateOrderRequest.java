@@ -1,6 +1,6 @@
 package com.project.pageflow.dto;
 
-import com.project.pageflow.models.TransactionType;
+import com.project.pageflow.models.OrderType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InitiateTransactionRequest {
+public class InitiateOrderRequest {
 
     @NotNull
     private String studentRollNumber;
@@ -21,6 +21,6 @@ public class InitiateTransactionRequest {
     private Integer adminId;
 
     @NotNull
-    private TransactionType transactionType;
+    private OrderType orderType;
 
 }

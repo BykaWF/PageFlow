@@ -1,13 +1,13 @@
 package com.project.pageflow.controller;
 
-import com.project.pageflow.dto.InitiateTransactionRequest;
+import com.project.pageflow.dto.InitiateOrderRequest;
 import com.project.pageflow.service.TransactionService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/transaction")
+@Controller
 public class TransactionController {
     private final TransactionService transactionService;
 
@@ -16,8 +16,9 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public String initiateTransaction(@RequestBody @Valid InitiateTransactionRequest initiateTransactionRequest) throws Exception {
-        return transactionService.initiateTransaction(initiateTransactionRequest);
+    public String initiateTransaction(@RequestBody @Valid InitiateOrderRequest initiateOrderRequest, Model model) throws Exception {
+
+        return transactionService.initiateTransaction(initiateOrderRequest);
     }
 
 

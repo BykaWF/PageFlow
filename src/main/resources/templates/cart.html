@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Cart - PAGE&FLOW</title>
+    <!-- Favicon-->
+    <!--    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">-->
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{/styles/styles-bot.css}" rel="stylesheet">
+
+</head>
+<body data-new-gr-c-s-check-loaded="8.910.0" data-gr-ext-installed="">
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="/library">PAGE&FLOW</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/library">Home</a></li>
+                <!--                <li class="nav-item dropdown">-->
+                <!--                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>-->
+                <!--                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+                <!--                        <li><a class="dropdown-item" href="#!">All Products</a></li>-->
+                <!--                        <li><hr class="dropdown-divider"></li>-->
+                <!--                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>-->
+                <!--                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>-->
+                <!--                    </ul>-->
+                <!--                </li>-->
+            </ul>
+            <form class="d-flex">
+                <button class="btn btn-outline-dark" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+<!-- Cart items section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h2 class="fw-bolder mb-4">Shopping Cart</h2>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="p-2 px-3 text-uppercase">Product</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="py-2 text-uppercase">Price</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="py-2 text-uppercase">Quantity</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="py-2 text-uppercase">Remove</div>
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <!-- TODO CARD BODY  -->
+
+                        <tbody id="cart-items">
+                        <!-- Example cart items -->
+                        <tr>
+                            <td class="border-0 align-middle">
+                                <img src="https://via.placeholder.com/50" alt="Book 1" class="img-fluid rounded">
+                                <strong class="ms-2">Book 1</strong>
+                            </td>
+                            <td class="border-0 align-middle">$20.00</td>
+                            <td class="border-0 align-middle" style="width: 200px;">
+                                <input type="number" class="form-control quantity-input" value="1" min="1">
+                            </td>
+                            <td class="border-0 align-middle">
+                                <button class="btn btn-danger remove-item">Remove</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border-0 align-middle">
+                                <img src="https://via.placeholder.com/50" alt="Book 2" class="img-fluid rounded">
+                                <strong class="ms-2">Book 2</strong>
+                            </td>
+                            <td class="border-0 align-middle">$25.00</td>
+                            <td class="border-0 align-middle" style="width: 200px;">
+                                <input type="number" class="form-control quantity-input" value="1" min="1">
+                            </td>
+                            <td class="border-0 align-middle">
+                                <button class="btn btn-danger remove-item">Remove</button>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                        <!-- TODO CARD BODY -->
+
+
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <!-- Cart summary will be displayed here -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Cart Summary</h5>
+                        <p class="card-text">Total: $0.00</p>
+                        <a href="#" class="btn btn-primary">Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer-->
+<footer class="py-3 bg-dark fixed-bottom">
+    <div class="container">
+        <p class="m-0 text-center text-white small">Copyright &copy; PAGE&FLOW 2024</p>
+    </div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<!--<script src="js/scripts.js"></script>-->
+</body>
+</html>

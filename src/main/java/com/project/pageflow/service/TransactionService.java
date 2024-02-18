@@ -1,10 +1,9 @@
 package com.project.pageflow.service;
 
-import com.project.pageflow.dto.InitiateTransactionRequest;
+import com.project.pageflow.dto.InitiateOrderRequest;
 import com.project.pageflow.repository.TransactionRepository;
 
 import com.project.pageflow.models.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +34,10 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public String initiateTransaction(InitiateTransactionRequest initiateTransactionRequest) throws Exception {
-        return initiateTransactionRequest.getTransactionType() == TransactionType.RETURN
-                ? returnBook(initiateTransactionRequest)
-                : issueBook(initiateTransactionRequest);
+    public String initiateTransaction(InitiateOrderRequest initiateOrderRequest) throws Exception {
+        return initiateOrderRequest.getOrderType() == OrderType.RETURN
+                ? returnBook(initiateOrderRequest)
+                : issueBook(initiateOrderRequest);
 
     }
 
@@ -50,14 +49,14 @@ public class TransactionService {
      *      4. Entry in the transaction
      *      5. Book to be assigned to a student => update Student column in the book table
      */
-    private String issueBook(InitiateTransactionRequest initiateTransactionRequest) throws Exception {
-        List<Student> studentList = studentService.findStudent("rollNumber", initiateTransactionRequest.getStudentRollNumber());
+    private String issueBook(InitiateOrderRequest initiateOrderRequest) throws Exception {
+        List<Student> studentList = studentService.findByRollNumber(initiateOrderRequest.getStudentRollNumber());
         Student student = !studentList.isEmpty() ? studentList.getFirst() : null;
 
-        List<Book> bookList = bookService.findBook("id", String.valueOf(initiateTransactionRequest.getBookId()));
-        Book book = !bookList.isEmpty() ? bookList.getFirst() : null;
+        Optional<Book> bookList = bookService.findById(initiateOrderRequest.getBookId());
+        Book book = bookList.orElse(null);
 
-        Optional<Admin> admin = adminService.find(initiateTransactionRequest.getAdminId());
+        Optional<Admin> admin = adminService.find(initiateOrderRequest.getAdminId());
 
         // 1. Validate the request
         if(student == null || book == null || admin.isEmpty()) {
@@ -66,7 +65,7 @@ public class TransactionService {
 
         // 2. Validate if book is available
         if(book.getStudent() != null) {
-            throw new Exception("This book is already issued to " + book.getStudent().getName());
+            throw new Exception("This book is already issued to " + book.getStudent().getFirstName());
         }
 
         // 3. Validate if the book can be issued to the given student
@@ -81,8 +80,8 @@ public class TransactionService {
                     .student(student)
                     .book(book)
                     .admin(admin.get())
-                    .transactionStatus(TransactionStatus.PENDING)
-                    .transactionType(TransactionType.ISSUE)
+                    .orderStatus(OrderStatus.PENDING)
+                    .orderType(OrderType.ISSUE)
                     .build();
 
             // 4. Entry in the transaction table with status = PENDING
@@ -92,9 +91,9 @@ public class TransactionService {
             book.setStudent(student);
             bookService.createOrUpdateBook(book);
 
-            transaction.setTransactionStatus(TransactionStatus.SUCCESS);
+            transaction.setOrderStatus(OrderStatus.SUCCESS);
         } catch(Exception e) {
-            transaction.setTransactionStatus(TransactionStatus.FAILURE);
+            transaction.setOrderStatus(OrderStatus.FAILURE);
         } finally {
             transactionRepository.save(transaction);
         }
@@ -109,14 +108,14 @@ public class TransactionService {
      * 4. Due date check, if due date - issue date > allowedDuration => fine calculation
      * 5. If there is no fine, de-allocate the book from student's name ===> book table
      */
-    private String returnBook(InitiateTransactionRequest initiateTransactionRequest) throws Exception {
-        List<Student> studentList = studentService.findStudent("rollNumber", initiateTransactionRequest.getStudentRollNumber());
+    private String returnBook(InitiateOrderRequest initiateOrderRequest) throws Exception {
+        List<Student> studentList = studentService.findByRollNumber(initiateOrderRequest.getStudentRollNumber());
         Student student = !studentList.isEmpty() ? studentList.getFirst() : null;
 
-        List<Book> bookList = bookService.findBook("id", String.valueOf(initiateTransactionRequest.getBookId()));
-        Book book = !bookList.isEmpty() ? bookList.getFirst() : null;
+        Optional<Book> bookList = bookService.findById(initiateOrderRequest.getBookId());
+        Book book = bookList.orElse(null);
 
-        Optional<Admin> admin = adminService.find(initiateTransactionRequest.getAdminId());
+        Optional<Admin> admin = adminService.find(initiateOrderRequest.getAdminId());
 
         // 1. Validate the request
         if(student == null || book == null || admin.isEmpty()) {
@@ -128,7 +127,7 @@ public class TransactionService {
         }
 
         // 2. Get the corresponding issuance transaction
-        Transaction issuanceTransaction = transactionRepository.findTransactionByStudentAndBookAndTransactionTypeOrderByIdDesc(student, book, TransactionType.ISSUE);
+        Transaction issuanceTransaction = transactionRepository.findTransactionByStudentAndBookAndOrderTypeOrderByIdDesc(student, book, OrderType.ISSUE);
         if(issuanceTransaction == null) {
             throw new Exception("This book hasn't been issued to anyone");
         }
@@ -139,8 +138,8 @@ public class TransactionService {
 
             transaction = Transaction.builder()
                     .transactionId(UUID.randomUUID().toString())
-                    .transactionType(initiateTransactionRequest.getTransactionType())
-                    .transactionStatus(TransactionStatus.PENDING)
+                    .orderType(initiateOrderRequest.getOrderType())
+                    .orderStatus(OrderStatus.PENDING)
                     .admin(admin.get())
                     .book(book)
                     .student(student)
@@ -155,12 +154,12 @@ public class TransactionService {
                 // de allocating the book
                 book.setStudent(null);
                 bookService.createOrUpdateBook(book);
-                transaction.setTransactionStatus(TransactionStatus.SUCCESS);
+                transaction.setOrderStatus(OrderStatus.SUCCESS);
             }
 
 
         } catch (Exception e) {
-            transaction.setTransactionStatus(TransactionStatus.FAILURE);
+            transaction.setOrderStatus(OrderStatus.FAILURE);
         } finally {
             transactionRepository.save(transaction);
         }

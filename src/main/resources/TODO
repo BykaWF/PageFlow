@@ -1,9 +1,51 @@
-11.02.2024:
-<---- TO DO ---->
-Search engine - V -> if not found add message and show to user - V
+18.02.24:
+<---- TODO ---->
 
-Add feature that gives opportunity to user buy a book and see this book in own information and check a limit books
+1/2 V Create shopping session for user after login ( ShoppingSessionSuccessHandler )
+    * redirect to library after ( change implementation of ShoppingSessionSuccessHandler)
 
+- After making a payment, clear shopping session and cart_item
+- Save all required info in Transaction
+
+- Change implementation of Book
+ * remove author_id, create book with author but without id
+
+- Change implementation of Transaction
+ * validation of request, because now we have a cart_item and session that help to get total, id and so on
+
+- Shopping session
+ * add logic of total
+
+- Cart_Item
+ * quantity update
+
+- Implement adding cart_item from frontend
+- Implement frontend view of shopping cart
+- Transaction moments
+- See in profile books
+- See in profile transaction info ( only price and when )
+
+
+<---- TODO DONE ---->
+V Use services to create new shopping cart, item
+V append a book
+V append a student
+V Change impl of Shopping cart looks so useless
+V Add price to books
+V cart item should contain only a quantity without price
+V price will be inside book
+V Add to shopping cart total
+V shopping_session
+
+
+17.02.24:
+<---- TODO DONE ---->
+V - Add to user shopping cart for session
+V - Add book to cart item
+V - Add cartItem to ShoppingCart
+
+
+<--- TODO LATER --->
 Add related books based on genre
 Transaction of book and you can see as a student your own transactions
 Student add transaction table

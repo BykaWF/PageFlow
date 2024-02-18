@@ -33,10 +33,7 @@ public class AdminController {
         bookService.createOrUpdateBook(createBookRequest.toBook());
     }
 
-    @GetMapping("/all")
-    public List<Book> getBooks(@RequestBody @Valid SearchRequest searchRequest) throws Exception {
-        return bookService.findBook(searchRequest.getSearchKey(), searchRequest.getSearchValue());
-    }
+
 
 
 }

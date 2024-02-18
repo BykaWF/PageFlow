@@ -39,27 +39,8 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public List<Book> findBook(String searchKey, String searchValue) throws Exception {
-        switch (searchKey) {
-            case "name":
-                return bookRepository.findByTitle(searchValue);
-            case "author_name":
-                return bookRepository.findByAuthor_Name(searchValue);
-            case "genre":
-                return bookRepository.findByGenre(Genre.valueOf(searchValue));
-            case "id": {
-                Optional<Book> book = bookRepository.findById(Integer.parseInt(searchValue));
-                if(book.isPresent()) {
-                    return Arrays.asList(book.get());
-                } else {
-                    return new ArrayList<>();
-                }
-            } default:
-                throw new Exception("Search key is not valid " + searchKey);
-        }
-    }
 
-    public Optional<Book> getById(Integer id) {
+    public Optional<Book> findById(Integer id) {
         return bookRepository.findById(id);
     }
 

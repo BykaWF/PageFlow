@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class Book {
     private Boolean isAvaliable;
     private String discription;
     private String imgURL;
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn
@@ -35,7 +37,7 @@ public class Book {
     private Date updatedOn;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "stud_id")
     private Student student;
 
     @Enumerated(value = EnumType.STRING)
