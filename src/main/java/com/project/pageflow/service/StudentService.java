@@ -3,6 +3,8 @@ package com.project.pageflow.service;
 import com.project.pageflow.models.Student;
 import com.project.pageflow.repository.StudentRepository;
 import com.project.pageflow.models.SecuredUser;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,16 @@ public class StudentService {
     public StudentService(StudentRepository studentRepository, UserService userService) {
         this.studentRepository = studentRepository;
         this.userService = userService;
+    }
+
+    public Student getCurrentStudent(Authentication authentication){
+        Object principal = authentication.getPrincipal();
+
+        if(principal instanceof SecuredUser){
+            return ((SecuredUser) principal).getStudent();
+        }
+        return null;
+
     }
 
     public void createStudent(Student student) {

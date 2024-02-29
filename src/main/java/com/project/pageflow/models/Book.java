@@ -46,6 +46,4 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<Transaction> transactionList;
 
-
-
 }

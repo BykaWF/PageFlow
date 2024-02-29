@@ -67,42 +67,26 @@
                             </th>
                         </tr>
                         </thead>
-
-                        <!-- TODO CARD BODY  -->
-
                         <tbody id="cart-items">
-                        <!-- Example cart items -->
-                        <tr>
+                        <!-- Dynamically populate cart items using Thymeleaf -->
+                        <tr th:each="cartItem : ${cartItems}">
                             <td class="border-0 align-middle">
-                                <img src="https://via.placeholder.com/50" alt="Book 1" class="img-fluid rounded">
-                                <strong class="ms-2">Book 1</strong>
+                                <img th:src="${cartItem.book.imgURL}" alt="Book Image" class="img-fluid rounded">
+                                <strong class="ms-2" th:text="${cartItem.book.title}">Book Title</strong>
                             </td>
-                            <td class="border-0 align-middle">$20.00</td>
+                            <td class="border-0 align-middle" th:text="${' $' + cartItem.book.price}">$0.00</td>
                             <td class="border-0 align-middle" style="width: 200px;">
-                                <input type="number" class="form-control quantity-input" value="1" min="1">
+                                <input type="number" class="form-control quantity-input" th:value="${cartItem.quantity}" min="1">
                             </td>
                             <td class="border-0 align-middle">
-                                <button class="btn btn-danger remove-item">Remove</button>
+                                <form th:action="@{/delete}" th:method="post">
+                                    <input type="hidden" name="cartItemId" th:value="${cartItem.id}" />
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
                             </td>
-                        </tr>
-                        <tr>
-                            <td class="border-0 align-middle">
-                                <img src="https://via.placeholder.com/50" alt="Book 2" class="img-fluid rounded">
-                                <strong class="ms-2">Book 2</strong>
-                            </td>
-                            <td class="border-0 align-middle">$25.00</td>
-                            <td class="border-0 align-middle" style="width: 200px;">
-                                <input type="number" class="form-control quantity-input" value="1" min="1">
-                            </td>
-                            <td class="border-0 align-middle">
-                                <button class="btn btn-danger remove-item">Remove</button>
-                            </td>
+
                         </tr>
                         </tbody>
-
-                        <!-- TODO CARD BODY -->
-
-
                     </table>
                 </div>
             </div>
@@ -111,7 +95,8 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Cart Summary</h5>
-                        <p class="card-text">Total: $0.00</p>
+                        <!-- Dynamically populate total price using Thymeleaf -->
+                        <p class="card-text" th:text="'Total: $' + ${shoppingSession.total}">Total: $0.00</p>
                         <a href="#" class="btn btn-primary">Checkout</a>
                     </div>
                 </div>
@@ -119,6 +104,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- Footer-->
 <footer class="py-3 bg-dark fixed-bottom">
