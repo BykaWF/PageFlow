@@ -1,3 +1,14 @@
+<--- TODO --->
+total update
+think on the way to stay on the same page
+
+29.02.2024
+<--- TODO DONE --->
+V- update quantity ( I think I need algo that will check same items and change just quantity for current student )
+V - solved problem with transactions and cartItems
+V - price $null
+
+
 20.02.24:
 <---- TODO ---->
 
@@ -16,8 +27,8 @@ V Shopping session
 V add logic of total
 V Cart_Item
 V quantity update
- V Create shopping session for user after login ( ShoppingSessionSuccessHandler )
- V redirect to library after ( change implementation of ShoppingSessionSuccessHandler)
+V Create shopping session for user after login ( ShoppingSessionSuccessHandler )
+V redirect to library after ( change implementation of ShoppingSessionSuccessHandler)
 
 
 <---- TODO DONE 18.02.24---->

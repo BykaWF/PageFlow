@@ -7,6 +7,7 @@ import com.project.pageflow.repository.ShoppingSessionRepository;
 import com.project.pageflow.repository.StudentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,6 +18,8 @@ public class ShoppingSessionService {
 
     private ShoppingSessionRepository shoppingSessionRepository;
     private StudentRepository studentRepository;
+    private CartItemService cartItemService;
+
 
     public void openOrUpdateShoppingSessionForStudent(Student student) {
 
@@ -33,18 +36,22 @@ public class ShoppingSessionService {
 
     }
 
-    public void updateTotalOfCurrentStudent(ShoppingSession currentShoppingSession) {
-        if (currentShoppingSession != null && currentShoppingSession.getCartItems() != null) {
-            List<CartItem> cartItems = currentShoppingSession.getCartItems();
+    public void updateTotalOfCurrentStudent(Student student) {
+        if (student.getShoppingSession() != null) {
+
+            List<CartItem> cartItems = cartItemService.getCartItems(student.getShoppingSession().getId());
+
 
             BigDecimal totalPrice = cartItems.stream()
                     .map(item -> item.getBook().getPrice().multiply(new BigDecimal(item.getQuantity())))
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            currentShoppingSession.setTotal(totalPrice);
-            shoppingSessionRepository.saveAndFlush(currentShoppingSession);
+            student.getShoppingSession().setTotal(totalPrice);
+
+            shoppingSessionRepository.saveAndFlush(student.getShoppingSession());
         } else {
             throw new IllegalArgumentException("Invalid shopping session");
         }
     }
+
 }

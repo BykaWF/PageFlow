@@ -3,6 +3,7 @@ package com.project.pageflow.controller;
 import com.project.pageflow.dto.CartItemDto;
 import com.project.pageflow.models.CartItem;
 import com.project.pageflow.models.ShoppingSession;
+import com.project.pageflow.models.Student;
 import com.project.pageflow.service.CartItemService;
 import com.project.pageflow.service.StudentService;
 import lombok.AllArgsConstructor;
@@ -24,21 +25,21 @@ public class CartItemController {
 
     @GetMapping("/cart")
     public String getCartItems(Model model,Authentication authentication){
-        ShoppingSession currentShoppingSession = studentService.getCurrentStudent(authentication).getShoppingSession();
 
-        List<CartItem> cartItems = cartItemService.getCartItems(currentShoppingSession);
+        Student student = studentService.getCurrentStudent(authentication);
+        List<CartItem> cartItems = cartItemService.getCartItems(student.getShoppingSession().getId());
 
         model.addAttribute("cartItems", cartItems);
-        model.addAttribute("shoppingSession", currentShoppingSession);
+        model.addAttribute("shoppingSession", student.getShoppingSession());
 
         return "cart";
     }
 
     @PostMapping("/new-item")
-    public ResponseEntity<?> addItem(@RequestBody CartItemDto cartItemDto, Authentication authentication) {
+    public String addItem(@ModelAttribute("cartItemDto") CartItemDto cartItemDto, Authentication authentication) {
 
         cartItemService.addOrUpdateCartItemForStudent(cartItemDto, studentService.getCurrentStudent(authentication));
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Item added successfully");
+        return "redirect:/library";
 
     }
 

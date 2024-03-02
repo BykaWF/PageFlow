@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 
 @Getter
 @Setter
@@ -36,6 +38,9 @@ public class CreateBookRequest {
     @NotBlank
     private String authorEmail;
 
+    @NotNull
+    private BigDecimal price;
+
     public Book toBook() {
 
         Author author = Author.builder()
@@ -46,6 +51,7 @@ public class CreateBookRequest {
         return Book.builder()
                 .title(this.title)
                 .discription(this.discription)
+                .price(this.price)
                 .imgURL(this.imgURL)
                 .isAvaliable(this.isAvailable)
                 .genre(this.genre)

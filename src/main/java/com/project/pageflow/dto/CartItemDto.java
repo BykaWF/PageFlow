@@ -20,8 +20,6 @@ public class CartItemDto {
     private Integer bookId;
     @Min(1)
     private Integer quantity;
-    @Min(0)
-    private BigDecimal price;
 
     public CartItem toItem(){
         return CartItem.builder()

@@ -10,8 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
     navLinks.forEach(link => {
         link.addEventListener('click', function(event) {
             event.preventDefault();
-            const targetPage = this.getAttribute('href');
-            window.location.href = targetPage;
+            window.location.href = this.getAttribute('href');
         });
     });
 
