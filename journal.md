@@ -48,3 +48,64 @@ Added search-book.html with a search engine using PostgreSQL Full Text:
 
    - **Challenge**: Implementing a search functionality for books.
    - **Solution**: Created search-book.html and implemented a search engine using PostgreSQL Full Text search for efficient book searching.
+
+Date: 20.02.2024
+
+After making a payment, clear shopping session and cart_item:
+
+    Challenge: Ensure that the shopping session and cart items are properly cleared after a payment is made.
+    Solution: Implemented logic to clear the shopping session and cart items upon successful payment.
+
+Save all required info in Transaction:
+
+    Challenge: Need to save all necessary information related to transactions.
+    Solution: Implemented functionality to save all required information in the Transaction entity.
+
+Change implementation of Transaction:
+
+    Challenge: Needed to change the implementation of transactions for improved functionality.
+    Solution: Modified the implementation of transactions to enhance their functionality.
+
+Implement adding cart_item from frontend:
+
+    Challenge: Implement functionality to add cart items from the frontend.
+    Solution: Developed the frontend functionality to allow users to add items to their shopping carts.
+
+Implement frontend view of shopping cart:
+
+    Challenge: Create a user-friendly frontend view for the shopping cart.
+    Solution: Designed and implemented a frontend view for the shopping cart to enhance user experience.
+
+Transaction moments:
+
+    Challenge: Implement transaction moments for better tracking and management.
+    Solution: Added functionality to track transaction moments for improved management and monitoring.
+
+See in profile books:
+
+    Challenge: Enable users to view their purchased books in their profiles.
+    Solution: Implemented functionality to display purchased books in user profiles.
+
+See in profile transaction info (only price and when):
+
+    Challenge: Display transaction information, including price and timestamp, in user profiles.
+    Solution: Added functionality to display transaction information, including price and timestamp, in user profiles.
+
+Date: 29.02.2024
+
+Update quantity (algorithm for checking same items and changing quantity for current student):
+
+    Challenge: Implement an algorithm to update the quantity of items in the shopping cart for the current student.
+    Solution: Developed an algorithm to check for identical items and update their quantities accordingly for the current student.
+
+Solved problem with transactions and cartItems:
+
+    Challenge: Addressed issues related to transactions and cart items.
+    Solution: Identified and resolved problems related to transactions and cart items for improved functionality.
+
+Price $null:
+
+    Challenge: Resolve issues related to displaying null prices.
+    Solution: Implemented a fix to display prices properly, including handling cases where prices were null.
+
+This journal-style summary provides an organized overview of the to-do tasks completed on different dates, along with the challenges faced and the solutions implemented.
