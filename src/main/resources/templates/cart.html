@@ -33,12 +33,17 @@
                 <!--                    </ul>-->
                 <!--                </li>-->
             </ul>
-            <form class="d-flex">
-                <button class="btn btn-outline-dark" type="submit">
-                    <i class="bi-cart-fill me-1"></i>
+            <form class="d-flex align-items-center me-2"> <!-- Add align-items-center class for centering -->
+                <a href="/student-info" class="btn btn-outline-dark d-flex align-items-center">
+                    <i class="bi bi-person-badge-fill"></i>
+                    Account
+                </a>
+            </form>
+            <form class="d-flex align-items-center me-2"> <!-- Add align-items-center class for centering -->
+                <a href="/cart" class="btn btn-outline-dark d-flex align-items-center">
+                    <i class="bi-cart-fill me-1 "></i>
                     Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                </button>
+                </a>
             </form>
         </div>
     </div>
@@ -74,9 +79,22 @@
                                 <img th:src="${cartItem.book.imgURL}" alt="Book Image" class="img-fluid rounded">
                                 <strong class="ms-2" th:text="${cartItem.book.title}">Book Title</strong>
                             </td>
-                            <td class="border-0 align-middle" th:text="${' $' + cartItem.book.price}">$0.00</td>
+                            <td class="border-0 align-middle" th:text="${' $' + cartItem.subtotal}">$0.00</td>
                             <td class="border-0 align-middle" style="width: 200px;">
-                                <input type="number" class="form-control quantity-input" th:value="${cartItem.quantity}" min="1">
+                                <form id="quantityForm" th:action="@{/updateQuantity}" th:method="post">
+                                    <input type="hidden" name="bookId" th:value="${cartItem.book.id}" />
+                                    <label>
+                                        <input type="text" id="quantityInput" name="quantity" class="form-control quantity-input" th:value="${cartItem.quantity}" pattern="[0-9]+" title="Please enter a valid quantity" required>
+                                    </label>
+                                </form>
+                                <script>
+                                    const quantityInput = document.getElementById('quantityInput');
+
+                                    quantityInput.addEventListener('blur', function() {
+                                        const form = document.getElementById('quantityForm');
+                                        form.submit();
+                                    });
+                                </script>
                             </td>
                             <td class="border-0 align-middle">
                                 <form th:action="@{/delete}" th:method="post">
@@ -84,7 +102,6 @@
                                     <button type="submit" class="btn btn-danger">Remove</button>
                                 </form>
                             </td>
-
                         </tr>
                         </tbody>
                     </table>

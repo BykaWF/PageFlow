@@ -1,14 +1,15 @@
 package com.project.pageflow.controller;
 
 import com.project.pageflow.dto.CartItemDto;
+import com.project.pageflow.models.Book;
 import com.project.pageflow.models.CartItem;
-import com.project.pageflow.models.ShoppingSession;
 import com.project.pageflow.models.Student;
+import com.project.pageflow.service.BookService;
 import com.project.pageflow.service.CartItemService;
+import com.project.pageflow.service.ShoppingSessionService;
 import com.project.pageflow.service.StudentService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,20 +23,24 @@ public class CartItemController {
 
     private CartItemService cartItemService;
     private StudentService studentService;
+    private ShoppingSessionService shoppingSessionService;
+    private BookService bookService;
 
     @GetMapping("/cart")
+    @PreAuthorize("isAuthenticated()")
     public String getCartItems(Model model,Authentication authentication){
 
         Student student = studentService.getCurrentStudent(authentication);
         List<CartItem> cartItems = cartItemService.getCartItems(student.getShoppingSession().getId());
 
         model.addAttribute("cartItems", cartItems);
-        model.addAttribute("shoppingSession", student.getShoppingSession());
+        model.addAttribute("shoppingSession", shoppingSessionService.updateTotalOfCurrentSession(student.getShoppingSession()));
 
         return "cart";
     }
 
     @PostMapping("/new-item")
+    @PreAuthorize("isAuthenticated()")
     public String addItem(@ModelAttribute("cartItemDto") CartItemDto cartItemDto, Authentication authentication) {
 
         cartItemService.addOrUpdateCartItemForStudent(cartItemDto, studentService.getCurrentStudent(authentication));
@@ -43,10 +48,19 @@ public class CartItemController {
 
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteItem(@RequestParam("cartItemId")Long cartItemId){
+    @PostMapping("/delete")
+    @PreAuthorize("isAuthenticated()")
+    public String deleteItem(@RequestParam("cartItemId")Long cartItemId){
         cartItemService.deleteCartItem(cartItemId);
+        return "redirect:/cart";
+    }
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Item deleted successfully");
+    @PostMapping("/updateQuantity")
+    @PreAuthorize("isAuthenticated()")
+    public String updateQuantity(@RequestParam("bookId") Integer bookId, @RequestParam("quantity") Integer quantity){
+        cartItemService.updateExistingCartItem(
+                bookService.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Book is not found"))
+                ,quantity);
+        return "redirect:/cart";
     }
 }

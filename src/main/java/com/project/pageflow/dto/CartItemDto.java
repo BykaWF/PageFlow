@@ -21,6 +21,7 @@ public class CartItemDto {
     @Min(1)
     private Integer quantity;
 
+
     public CartItem toItem(){
         return CartItem.builder()
                 .quantity(this.quantity)

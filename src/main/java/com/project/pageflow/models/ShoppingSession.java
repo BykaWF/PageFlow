@@ -26,7 +26,7 @@ public class ShoppingSession {
 
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "shoppingSession" ,cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "shoppingSession")
     private List<CartItem> cartItems;
 
     @CreationTimestamp

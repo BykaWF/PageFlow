@@ -1,60 +1,58 @@
-<--- TODO --->
-total update
-think on the way to stay on the same page
-
-29.02.2024
-<--- TODO DONE --->
-V- update quantity ( I think I need algo that will check same items and change just quantity for current student )
-V - solved problem with transactions and cartItems
-V - price $null
+To-Do:
+    March 3, 2024:
 
 
-20.02.24:
-<---- TODO ---->
-
-- After making a payment, clear shopping session and cart_item
-- Save all required info in Transaction
-- Change implementation of Transaction
- * validation of request, because now we have a cart_item and session that help to get total, id and so on
-- Implement adding cart_item from frontend
-- Implement frontend view of shopping cart
-- Transaction moments
-- See in profile books
-- See in profile transaction info ( only price and when )
-
-<---- TODO DONE 19.02.24 -->
-V Shopping session
-V add logic of total
-V Cart_Item
-V quantity update
-V Create shopping session for user after login ( ShoppingSessionSuccessHandler )
-V redirect to library after ( change implementation of ShoppingSessionSuccessHandler)
 
 
-<---- TODO DONE 18.02.24---->
-V Use services to create new shopping cart, item
-V append a book
-V append a student
-V Change impl of Shopping cart looks so useless
-V Add price to books
-V cart item should contain only a quantity without price
-V price will be inside book
-V Add to shopping cart total
-V shopping_session
+Completed Tasks:
+    March 3, 2024:
+        Delete Item from /cart
+     March 2, 2024:
+        Change quantity in /cart
 
+    February 17, 2024:
+        Add to user shopping cart for session
+        Add book to cart item
+        Add cartItem to ShoppingCart
 
-17.02.24:
-<---- TODO DONE ---->
-V - Add to user shopping cart for session
-V - Add book to cart item
-V - Add cartItem to ShoppingCart
+    February 18, 2024:
+        Use services to create new shopping cart, item
+        Append a book
+        Append a student
+        Change implementation of Shopping cart
+        Add price to books
+        Cart item should contain only a quantity without price
+        Price will be inside book
+        Add to shopping cart total
+        Shopping session
 
+    February 19, 2024:
+        Shopping session
+        Add logic of total
+        Cart_Item
+        Quantity update
+        Create shopping session for user after login (ShoppingSessionSuccessHandler)
+        Redirect to library after (change implementation of ShoppingSessionSuccessHandler)
 
-<--- TODO LATER --->
-Add related books based on genre
-Transaction of book and you can see as a student your own transactions
-Student add transaction table
-Admin profile
-Admin backend
+    February 20, 2024:
+        After making a payment, clear shopping session and cart_item
+        Save all required info in Transaction
+        Change implementation of Transaction
+        Implement adding cart_item from frontend
+        Implement frontend view of shopping cart
+        Transaction moments
+        See in profile books
+        See in profile transaction info (only price and when)
 
+    February 29, 2024:
+        Update quantity (I think I need algo that will check same items and change just quantity for current student)
+        Solved problem with transactions and cartItems
+        Price $null
 
+To-Do Later:
+
+    Add related books based on genre
+    Transaction of book and you can see as a student your own transactions
+    Student add transaction table
+    Admin profile
+    Admin backend

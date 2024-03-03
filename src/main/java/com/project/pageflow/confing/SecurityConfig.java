@@ -66,7 +66,6 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/api/shop/**").permitAll()
                                 .requestMatchers("/**").permitAll()
                                 .requestMatchers("/sing-up").permitAll()
                                 .requestMatchers("/static/**").permitAll()

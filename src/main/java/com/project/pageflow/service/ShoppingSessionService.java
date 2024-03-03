@@ -28,6 +28,7 @@ public class ShoppingSessionService {
             ShoppingSession shoppingSession = new ShoppingSession();
             shoppingSession.setStudent(student);
             student.setShoppingSession(shoppingSession);
+            shoppingSession.setTotal(new BigDecimal("0.00"));
 
             shoppingSessionRepository.save(shoppingSession);
         }
@@ -36,22 +37,15 @@ public class ShoppingSessionService {
 
     }
 
-    public void updateTotalOfCurrentStudent(Student student) {
-        if (student.getShoppingSession() != null) {
 
-            List<CartItem> cartItems = cartItemService.getCartItems(student.getShoppingSession().getId());
-
-
-            BigDecimal totalPrice = cartItems.stream()
-                    .map(item -> item.getBook().getPrice().multiply(new BigDecimal(item.getQuantity())))
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            student.getShoppingSession().setTotal(totalPrice);
-
-            shoppingSessionRepository.saveAndFlush(student.getShoppingSession());
-        } else {
-            throw new IllegalArgumentException("Invalid shopping session");
-        }
+    public ShoppingSession updateTotalOfCurrentSession(ShoppingSession currentShoppingSession) {
+        List<CartItem> cartItems = cartItemService.getCartItems(currentShoppingSession.getId());
+        currentShoppingSession.setTotal(getTotal(cartItems));
+        shoppingSessionRepository.save(currentShoppingSession);
+        return currentShoppingSession;
     }
 
+    public BigDecimal getTotal(List<CartItem> cartItems){
+       return cartItems.stream().map(CartItem::getSubtotal).reduce(BigDecimal.ZERO,BigDecimal::add);
+    }
 }
