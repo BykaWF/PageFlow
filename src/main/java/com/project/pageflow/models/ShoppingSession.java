@@ -9,36 +9,29 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@Data
 @Entity
-@Getter
-@Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book {
+@Builder
+public class ShoppingSession {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    private String title;
-    private Boolean isAvaliable;
-    private String discription;
-    private String imgURL;
-    private BigDecimal price;
+    @JoinColumn(name = "student_id")
+    @OneToOne
+    private Student student;
 
-    @ManyToOne
-    @JoinColumn
-    private Author book_author;
+    private BigDecimal total;
+
+    @OneToMany(mappedBy = "shoppingSession")
+    private List<CartItem> cartItems;
 
     @CreationTimestamp
     private Date createdOn;
 
     @UpdateTimestamp
     private Date updatedOn;
-
-    @ManyToOne
-    private Student student;
-
-    @Enumerated(value = EnumType.STRING)
-    private Genre genre;
 }

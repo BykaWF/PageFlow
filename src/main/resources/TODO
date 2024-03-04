@@ -1,13 +1,63 @@
-11.02.2024:
-<---- TO DO ---->
-Search engine - V -> if not found add message and show to user - V
-
-Add feature that gives opportunity to user buy a book and see this book in own information and check a limit books
-
-Add related books based on genre
-Transaction of book and you can see as a student your own transactions
-Student add transaction table
-Admin profile
-Admin backend
+To-Do:
+    March 3, 2024:
+        Checkout logic:
+            Revisit transaction service
+            Provide new logic
+            Add to HTML page logic
 
 
+
+Completed Tasks:
+
+    March 3, 2024:
+        Delete Item from /cart
+
+    March 2, 2024:
+        Change quantity in /cart
+
+    February 17, 2024:
+        Add to user shopping cart for session
+        Add book to cart item
+        Add cartItem to ShoppingCart
+
+    February 18, 2024:
+        Use services to create new shopping cart, item
+        Append a book
+        Append a student
+        Change implementation of Shopping cart
+        Add price to books
+        Cart item should contain only a quantity without price
+        Price will be inside book
+        Add to shopping cart total
+        Shopping session
+
+    February 19, 2024:
+        Shopping session
+        Add logic of total
+        Cart_Item
+        Quantity update
+        Create shopping session for user after login (ShoppingSessionSuccessHandler)
+        Redirect to library after (change implementation of ShoppingSessionSuccessHandler)
+
+    February 20, 2024:
+        After making a payment, clear shopping session and cart_item
+        Save all required info in Transaction
+        Change implementation of Transaction
+        Implement adding cart_item from frontend
+        Implement frontend view of shopping cart
+        Transaction moments
+        See in profile books
+        See in profile transaction info (only price and when)
+
+    February 29, 2024:
+        Update quantity (I think I need algo that will check same items and change just quantity for current student)
+        Solved problem with transactions and cartItems
+        Price $null
+
+To-Do Later:
+
+    Add related books based on genre
+    Transaction of book and you can see as a student your own transactions
+    Student add transaction table
+    Admin profile
+    Admin backend

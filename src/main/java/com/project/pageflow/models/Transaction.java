@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,21 +22,14 @@ public class Transaction {
     private String transactionId;
 
     @Enumerated(value = EnumType.STRING)
-    private TransactionType transactionType;
+    private OrderType orderType;
 
     @Enumerated(value = EnumType.STRING)
-    private TransactionStatus transactionStatus;
+    private OrderStatus orderStatus;
 
-    @CreationTimestamp
-    private Date createdOn;
+    private BigDecimal totalOrder;
 
-    private Integer fine;
-
-    @JoinColumn
-    @ManyToOne
-    private Book book;
-
-    @JoinColumn
+    @JoinColumn(name = "stud_id")
     @ManyToOne
     private Student student;
 
@@ -42,4 +37,16 @@ public class Transaction {
     @ManyToOne
     private Admin admin;
 
+    @OneToMany
+    @JoinColumn
+    private List<CartItem> cartItems;
+
+    @ManyToOne
+    private PaymentMethod paymentMethod;
+
+    @OneToOne
+    private ShippingAddress shippingAddress;
+
+    @CreationTimestamp
+    private Date createdOn;
 }

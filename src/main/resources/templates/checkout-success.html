@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Cart - PAGE&FLOW</title>
+    <!-- Favicon-->
+    <!--    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">-->
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{/styles/styles-bot.css}" rel="stylesheet">
+
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="/library">PAGE&FLOW</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/library">Home</a></li>
+                <!--                <li class="nav-item dropdown">-->
+                <!--                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>-->
+                <!--                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+                <!--                        <li><a class="dropdown-item" href="#!">All Products</a></li>-->
+                <!--                        <li><hr class="dropdown-divider"></li>-->
+                <!--                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>-->
+                <!--                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>-->
+                <!--                    </ul>-->
+                <!--                </li>-->
+            </ul>
+            <form class="d-flex align-items-center me-2"> <!-- Add align-items-center class for centering -->
+                <a href="/student-info" class="btn btn-outline-dark d-flex align-items-center">
+                    <i class="bi bi-person-badge-fill"></i>
+                    Account
+                </a>
+            </form>
+            <form class="d-flex align-items-center me-2"> <!-- Add align-items-center class for centering -->
+                <a href="/cart" class="btn btn-outline-dark d-flex align-items-center">
+                    <i class="bi-cart-fill me-1 "></i>
+                    Cart
+                </a>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card p-4">
+                    <div class="text-center">
+                        <i class="fas fa-check-circle"></i>
+                        <h2 class="mb-4">Thank you for your purchase!</h2>
+                    </div>
+                    <h3 class="mb-3">Items Purchased:</h3>
+                    <ul class="list-group mb-4">
+                        <li th:each="item : ${transaction.cartItems}" class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="product-title" th:text="${item.book.title}"></span>
+                            <span class="badge badge-primary badge-pill">$<span th:text="${item.subtotal}"></span></span>
+                        </li>
+                    </ul>
+                    <h3 class="mb-3">Payment Method:</h3>
+                    <p><i class="fas fa-credit-card mr-2"></i><span th:text="${transaction.paymentMethod.type}"></span></p>
+                    <p><i class="fas fa-credit-card mr-2"></i><span th:text="${transaction.paymentMethod.cardNumber}"></span></p>
+                    <!-- Add more payment method details as needed -->
+
+                    <h3 class="mb-3">Shipping Address:</h3>
+                    <p><i class="fas fa-map-marker-alt mr-2"></i><span th:text="${transaction.shippingAddress.streetAddress}"></span></p>
+                    <p><i class="fas fa-city mr-2"></i><span th:text="${transaction.shippingAddress.city}"></span></p>
+                    <p><i class="fas fa-envelope mr-2"></i><span th:text="${transaction.shippingAddress.postalCode}"></span></p>
+                    <p><i class="fas fa-globe mr-2"></i><span th:text="${transaction.shippingAddress.country}"></span></p>
+                    <!-- Add more shipping address details as needed -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+<footer class="py-3 bg-dark fixed-bottom">
+    <div class="container">
+        <p class="m-0 text-center text-white small">Copyright &copy; PAGE&FLOW 2024</p>
+    </div>
+</footer>
+</html>

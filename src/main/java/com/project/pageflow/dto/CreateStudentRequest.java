@@ -15,7 +15,9 @@ import lombok.*;
 public class CreateStudentRequest {
 
     @NotBlank
-    private String name;
+    private String firstName;
+    @NotBlank
+    private String secondName;
 
     @NotBlank
     private String email;
@@ -38,7 +40,8 @@ public class CreateStudentRequest {
               .password(this.password)
               .build();
       return Student.builder()
-              .name(this.name)
+              .firstName(this.firstName)
+              .secondName(this.secondName)
               .age(this.age)
               .securedUser(securedUser)
               .rollNumber(this.rollNumber)

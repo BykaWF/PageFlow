@@ -34,7 +34,7 @@ public class BookController {
     @GetMapping("/book/{id}")
     @PreAuthorize("isAuthenticated()")
     public String getBookItem(@PathVariable("id") Integer id, Model model){
-        Optional<Book> bookOptional = bookService.getById(id);
+        Optional<Book> bookOptional = bookService.findById(id);
 
         if(bookOptional.isPresent()){
             Book book = bookOptional.get();

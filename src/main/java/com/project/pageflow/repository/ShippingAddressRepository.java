@@ -1,10 +1,9 @@
 package com.project.pageflow.repository;
 
-import com.project.pageflow.models.Author;
+import com.project.pageflow.models.ShippingAddress;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Integer> {
-    Author findByEmail(String email);
+public interface ShippingAddressRepository extends JpaRepository<ShippingAddress,Long> {
 }

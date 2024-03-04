@@ -3,18 +3,12 @@ package com.project.pageflow.service;
 import com.project.pageflow.dto.CreateAdminRequest;
 import com.project.pageflow.models.Admin;
 import com.project.pageflow.models.SecuredUser;
-import com.project.pageflow.models.Transaction;
 import com.project.pageflow.repository.AdminRepository;
-import org.apache.catalina.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
