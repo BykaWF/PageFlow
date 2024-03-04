@@ -1,6 +1,5 @@
 package com.project.pageflow.confing;
 
-import com.project.pageflow.models.SecuredUser;
 import com.project.pageflow.models.Student;
 import com.project.pageflow.service.ShoppingSessionService;
 import com.project.pageflow.service.StudentService;

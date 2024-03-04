@@ -34,22 +34,25 @@ public class Student {
     @Column(name = "stud_age")
     private Integer age;
 
-    @CreationTimestamp
-    private Date createdOn;
-
-    @UpdateTimestamp
-    private Date updatedOn;
-
-    @OneToMany(mappedBy = "student")
-    private List<Book> bookList;
-
     @OneToMany(mappedBy = "student")
     private List<Transaction> transactionList;
 
     @OneToOne(mappedBy = "student")
     private ShoppingSession shoppingSession;
 
+    @OneToMany(mappedBy = "student")
+    private List<ShippingAddress> shippingAddress;
+
+    @OneToMany(mappedBy = "student")
+    private List<PaymentMethod> paymentMethods;
+
     @OneToOne
     @JoinColumn
     private SecuredUser securedUser;
+
+    @CreationTimestamp
+    private Date createdOn;
+
+    @UpdateTimestamp
+    private Date updatedOn;
 }

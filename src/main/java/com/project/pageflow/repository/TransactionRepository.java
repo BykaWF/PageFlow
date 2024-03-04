@@ -7,9 +7,11 @@ import com.project.pageflow.models.OrderType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
-    Transaction findTransactionByStudentAndBookAndOrderTypeOrderByIdDesc(Student student, Book book, OrderType orderType);
-
+    Optional<Transaction> findFirstByOrderByCreatedOnDesc();
 }

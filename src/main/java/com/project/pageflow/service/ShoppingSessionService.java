@@ -1,13 +1,14 @@
 package com.project.pageflow.service;
 
 import com.project.pageflow.models.CartItem;
+import com.project.pageflow.models.ShoppingCartInfo;
 import com.project.pageflow.models.ShoppingSession;
 import com.project.pageflow.models.Student;
 import com.project.pageflow.repository.ShoppingSessionRepository;
 import com.project.pageflow.repository.StudentRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,6 +36,14 @@ public class ShoppingSessionService {
 
         studentRepository.save(student);
 
+    }
+
+    public ShoppingCartInfo getShoppingCartInfo(Student student) {
+        Long shoppingSessionId = student.getShoppingSession().getId();
+        List<CartItem> cartItems = cartItemService.getCartItems(shoppingSessionId);
+        ShoppingSession updatedShoppingSession = updateTotalOfCurrentSession(student.getShoppingSession());
+
+        return new ShoppingCartInfo(cartItems, updatedShoppingSession);
     }
 
 

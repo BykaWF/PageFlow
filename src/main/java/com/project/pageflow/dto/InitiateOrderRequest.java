@@ -1,8 +1,11 @@
 package com.project.pageflow.dto;
 
-import com.project.pageflow.models.OrderType;
+import com.project.pageflow.models.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,13 +15,16 @@ import lombok.*;
 public class InitiateOrderRequest {
 
     @NotNull
-    private String studentRollNumber;
+    private List<CartItem> cartItemList; // take from cart
 
     @NotNull
-    private Integer bookId;
+    private PaymentMethod paymentMethod; // html form
 
     @NotNull
-    private Integer adminId;
+    private ShippingAddress shippingAddress; // html form
+
+    @NotNull
+    private BigDecimal total;
 
     @NotNull
     private OrderType orderType;

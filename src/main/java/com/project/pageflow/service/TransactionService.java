@@ -4,103 +4,117 @@ import com.project.pageflow.dto.InitiateOrderRequest;
 import com.project.pageflow.repository.TransactionRepository;
 
 import com.project.pageflow.models.*;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class TransactionService {
     private final StudentService studentService;
-    private final BookService bookService;
-    private final AdminService adminService;
-
     private final TransactionRepository transactionRepository;
 
-    @Value("${student.allowed.max-books}") // application.properties
-    Integer maxBooksAllowed;
 
-    @Value("${student.allowed.duration}") // application.properties
-    Integer allowedDuration;
-
-    public TransactionService(StudentService studentService, BookService bookService, AdminService adminService, TransactionRepository transactionRepository) {
+    public TransactionService(StudentService studentService, TransactionRepository transactionRepository) {
         this.studentService = studentService;
-        this.bookService = bookService;
-        this.adminService = adminService;
+
+
         this.transactionRepository = transactionRepository;
     }
 
-    public String initiateTransaction(InitiateOrderRequest initiateOrderRequest) throws Exception {
-        return initiateOrderRequest.getOrderType() == OrderType.RETURN
-                ? returnBook(initiateOrderRequest)
-                : issueBook(initiateOrderRequest);
+    public void initiateTransaction(InitiateOrderRequest initiateOrderRequest, Authentication authentication) throws Exception {
+        if (initiateOrderRequest.getOrderType() != OrderType.RETURN) {
+            checkoutBook(initiateOrderRequest, authentication);
+        }else {
+            returnBook(initiateOrderRequest,authentication);
+        }
 
     }
 
-    /**
-     * Issue of a book -> {studentRollNumber, bookId, adminId, transaction Type}
-     *      1. Validate the request -> student, book and admin is valid or not
-     *      2. Validate if book is available -> If the book is already issued on someone's name
-     *      3. Validate if the book can be issued to the given student -> We need to check if the student has available limit (issue limit) on his account or not
-     *      4. Entry in the transaction
-     *      5. Book to be assigned to a student => update Student column in the book table
-     */
-    private String issueBook(InitiateOrderRequest initiateOrderRequest) throws Exception {
-        List<Student> studentList = studentService.findByRollNumber(initiateOrderRequest.getStudentRollNumber());
-        Student student = !studentList.isEmpty() ? studentList.getFirst() : null;
+    private void checkoutBook(InitiateOrderRequest initiateOrderRequest, Authentication authentication) throws Exception {
 
-        Optional<Book> bookList = bookService.findById(initiateOrderRequest.getBookId());
-        Book book = bookList.orElse(null);
+        Student student = studentService.getCurrentStudent(authentication);
+        List<CartItem> cartItemList = initiateOrderRequest.getCartItemList();
+        ShippingAddress shippingAddress = initiateOrderRequest.getShippingAddress();
+        PaymentMethod paymentMethod = initiateOrderRequest.getPaymentMethod();
+        BigDecimal totalOrder = initiateOrderRequest.getTotal();
 
-        Optional<Admin> admin = adminService.find(initiateOrderRequest.getAdminId());
+        validateRequest(student, cartItemList, shippingAddress, paymentMethod, totalOrder);
+        Transaction transaction = processCheckoutTransaction(student, cartItemList, shippingAddress, paymentMethod, totalOrder);
+    }
 
-        // 1. Validate the request
-        if(student == null || book == null || admin.isEmpty()) {
+    private Transaction processCheckoutTransaction(Student student,
+                                                   List<CartItem> cartItems,
+                                                   ShippingAddress shippingAddress,
+                                                   PaymentMethod paymentMethod,
+                                                   BigDecimal totalOrder) {
+
+        Transaction transaction = buildTransaction(student, cartItems, shippingAddress, paymentMethod, totalOrder);
+
+        try {
+            saveTransaction(transaction);
+            transaction.setOrderStatus(OrderStatus.SUCCESS);
+
+        } catch (Exception e) {
+            handleTransactionFailure(transaction);
+        }finally {
+            saveTransaction(transaction);
+        }
+
+        return transaction;
+    }
+
+    private void saveTransaction(Transaction transaction) {
+        transactionRepository.save(transaction);
+    }
+
+    private void handleTransactionFailure(Transaction transaction) {
+        if (transaction != null) {
+            transaction.setOrderStatus(OrderStatus.FAILURE);
+            saveTransaction(transaction);
+        }
+    }
+
+    private Transaction buildTransaction(Student student,
+                                         List<CartItem> cartItems,
+                                         ShippingAddress shippingAddress,
+                                         PaymentMethod paymentMethod,
+                                         BigDecimal totalOrder) {
+
+        return Transaction.builder()
+                .transactionId(UUID.randomUUID().toString())
+                .student(student)
+                .cartItems(cartItems)
+                .shippingAddress(shippingAddress)
+                .paymentMethod(paymentMethod)
+                .totalOrder(totalOrder)
+                .orderStatus(OrderStatus.PENDING)
+                .orderType(OrderType.CHECKOUT)
+                .build();
+    }
+
+
+    private void validateRequest(Student student,
+                                 List<CartItem> cartItemList,
+                                 ShippingAddress shippingAddress,
+                                 PaymentMethod paymentMethod,
+                                 BigDecimal totalCheckout) throws Exception {
+
+        if (student == null
+                || cartItemList.isEmpty()
+                || shippingAddress == null
+                || paymentMethod == null
+                || totalCheckout == null) {
             throw new Exception("Invalid Request");
         }
-
-        // 2. Validate if book is available
-        if(book.getStudent() != null) {
-            throw new Exception("This book is already issued to " + book.getStudent().getFirstName());
-        }
-
-        // 3. Validate if the book can be issued to the given student
-        if(student.getBookList().size() >= maxBooksAllowed) {
-            throw new Exception("Issue limit reached for this student");
-        }
-
-        Transaction transaction = null;
-        try {
-            transaction = Transaction.builder()
-                    .transactionId(UUID.randomUUID().toString())
-                    .student(student)
-                    .book(book)
-                    .admin(admin.get())
-                    .orderStatus(OrderStatus.PENDING)
-                    .orderType(OrderType.ISSUE)
-                    .build();
-
-            // 4. Entry in the transaction table with status = PENDING
-            transactionRepository.save(transaction);
-
-            // 5. Book to be assigned to a student
-            book.setStudent(student);
-            bookService.createOrUpdateBook(book);
-
-            transaction.setOrderStatus(OrderStatus.SUCCESS);
-        } catch(Exception e) {
-            transaction.setOrderStatus(OrderStatus.FAILURE);
-        } finally {
-            transactionRepository.save(transaction);
-        }
-
-        return transaction.getTransactionId();
     }
 
+    public Transaction getLastTransaction() {
+        Optional<Transaction> lastTransaction = transactionRepository.findFirstByOrderByCreatedOnDesc();
+        return lastTransaction.orElse(null);
+    }
     /**
      * 1. Validate the book, student, admin and also validate if the book is issued to the same person
      * 2. Get the corresponding issuance transaction
@@ -108,64 +122,55 @@ public class TransactionService {
      * 4. Due date check, if due date - issue date > allowedDuration => fine calculation
      * 5. If there is no fine, de-allocate the book from student's name ===> book table
      */
-    private String returnBook(InitiateOrderRequest initiateOrderRequest) throws Exception {
-        List<Student> studentList = studentService.findByRollNumber(initiateOrderRequest.getStudentRollNumber());
-        Student student = !studentList.isEmpty() ? studentList.getFirst() : null;
-
-        Optional<Book> bookList = bookService.findById(initiateOrderRequest.getBookId());
-        Book book = bookList.orElse(null);
-
-        Optional<Admin> admin = adminService.find(initiateOrderRequest.getAdminId());
-
-        // 1. Validate the request
-        if(student == null || book == null || admin.isEmpty()) {
-            throw new Exception("Invalid Request");
-        }
-
-        if(book.getStudent() == null || !book.getStudent().getId().equals(student.getId())) {
-            throw new Exception("This book isn't assigned to the particular student");
-        }
-
-        // 2. Get the corresponding issuance transaction
-        Transaction issuanceTransaction = transactionRepository.findTransactionByStudentAndBookAndOrderTypeOrderByIdDesc(student, book, OrderType.ISSUE);
-        if(issuanceTransaction == null) {
-            throw new Exception("This book hasn't been issued to anyone");
-        }
-
-        Transaction transaction = null;
-        try {
-            Integer fine = calculateFine(issuanceTransaction.getCreatedOn());
-
-            transaction = Transaction.builder()
-                    .transactionId(UUID.randomUUID().toString())
-                    .orderType(initiateOrderRequest.getOrderType())
-                    .orderStatus(OrderStatus.PENDING)
-                    .admin(admin.get())
-                    .book(book)
-                    .student(student)
-                    .fine(fine)
-                    .build();
-
-            transactionRepository.save(transaction);
-
-            //pay Fine
-
-            if(fine == 0) {
-                // de allocating the book
-                book.setStudent(null);
-                bookService.createOrUpdateBook(book);
-                transaction.setOrderStatus(OrderStatus.SUCCESS);
-            }
-
-
-        } catch (Exception e) {
-            transaction.setOrderStatus(OrderStatus.FAILURE);
-        } finally {
-            transactionRepository.save(transaction);
-        }
-
-        return transaction.getTransactionId();
+    private void returnBook(InitiateOrderRequest initiateOrderRequest, Authentication authentication) throws Exception {
+//        Student student = getStudentFromOrderRequest(initiateOrderRequest);
+//        Book book = getBookFromOrderRequest(initiateOrderRequest);
+//
+//
+//        validateRequest(student,book);
+//
+//        if(book.getStudent() == null || !book.getStudent().getId().equals(student.getId())) {
+//            throw new Exception("This book isn't assigned to the particular student");
+//        }
+//
+//        // 2. Get the corresponding issuance transaction
+//        Transaction issuanceTransaction = transactionRepository.findTransactionByStudentAndBookAndOrderTypeOrderByIdDesc(student, book, OrderType.CHECKOUT);
+//        if(issuanceTransaction == null) {
+//            throw new Exception("This book hasn't been issued to anyone");
+//        }
+//
+//        Transaction transaction = null;
+//        try {
+//            Integer fine = calculateFine(issuanceTransaction.getCreatedOn());
+//
+//            transaction = Transaction.builder()
+//                    .transactionId(UUID.randomUUID().toString())
+//                    .orderType(initiateOrderRequest.getOrderType())
+//                    .orderStatus(OrderStatus.PENDING)
+//                    .book(book)
+//                    .student(student)
+//                    .fine(fine)
+//                    .build();
+//
+//            transactionRepository.save(transaction);
+//
+//            //pay Fine
+//
+//            if(fine == 0) {
+//                // de allocating the book
+//                book.setStudent(null);
+//                bookService.createOrUpdateBook(book);
+//                transaction.setOrderStatus(OrderStatus.SUCCESS);
+//            }
+//
+//
+//        } catch (Exception e) {
+//            transaction.setOrderStatus(OrderStatus.FAILURE);
+//        } finally {
+//            transactionRepository.save(transaction);
+//        }
     }
+
     private Integer calculateFine(Date issuanceTime) {
         long issuanceTimeInMillis = issuanceTime.getTime();
         long currentTime = System.currentTimeMillis();
@@ -174,9 +179,9 @@ public class TransactionService {
 
         long daysPassed = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 
-        if(daysPassed > allowedDuration) {
-            return (int)(daysPassed - allowedDuration);
-        }
+//        if (daysPassed > allowedDuration) {
+//            return (int) (daysPassed - allowedDuration);
+//        }
         return 0;
     }
 
@@ -186,7 +191,5 @@ public class TransactionService {
         // Deallocate the book, mark this transaction as successful
         // save this transaction in DB
     }
-
-
 
 }

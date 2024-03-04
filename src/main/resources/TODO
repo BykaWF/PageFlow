@@ -1,13 +1,18 @@
 To-Do:
     March 3, 2024:
-
+        Checkout logic:
+            Revisit transaction service
+            Provide new logic
+            Add to HTML page logic
 
 
 
 Completed Tasks:
+
     March 3, 2024:
         Delete Item from /cart
-     March 2, 2024:
+
+    March 2, 2024:
         Change quantity in /cart
 
     February 17, 2024:

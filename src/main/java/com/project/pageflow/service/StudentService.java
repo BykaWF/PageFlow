@@ -47,9 +47,6 @@ public class StudentService {
         return studentRepository.findById(studentId);
     }
 
-    public List<Student> findByRollNumber(String rollNumber){
-        return studentRepository.findStudentByRollNumber(rollNumber);
-    }
 
 
 

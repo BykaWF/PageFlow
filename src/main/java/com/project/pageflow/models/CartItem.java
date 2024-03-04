@@ -34,6 +34,9 @@ public class CartItem {
     @JoinColumn(name = "shopping_session_id")
     private ShoppingSession shoppingSession;
 
+    @ManyToOne
+    private Transaction transaction;
+
     private BigDecimal subtotal;
 
     @CreationTimestamp

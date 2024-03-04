@@ -8,12 +8,9 @@ import com.project.pageflow.repository.UserRepository;
 import com.project.pageflow.service.ShoppingSessionService;
 import com.project.pageflow.service.StudentService;
 import com.project.pageflow.service.UserService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -41,14 +38,12 @@ import java.util.List;
 public class SecurityConfig {
     private final UserRepository userRepository;
     private final ShoppingSessionService shoppingSessionService;
-
     private final  StudentRepository studentRepository;
 
     @Autowired
     public SecurityConfig(UserRepository userRepository, ShoppingSessionService shoppingSessionService, StudentRepository studentRepository) {
         this.userRepository = userRepository;
         this.shoppingSessionService = shoppingSessionService;
-
         this.studentRepository = studentRepository;
     }
 

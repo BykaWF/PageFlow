@@ -37,13 +37,8 @@ public class Book {
     private Date updatedOn;
 
     @ManyToOne
-    @JoinColumn(name = "stud_id")
     private Student student;
 
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
-
-    @OneToMany(mappedBy = "book")
-    private List<Transaction> transactionList;
-
 }
