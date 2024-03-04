@@ -1,6 +1,6 @@
 # PAGE FLOW
 
-Welcome to the PageFlow Library Management System repository! This system provides an efficient way to manage books, user accounts, and borrowing within a library.
+Welcome to the PageFlow Bookstore repository! This system provides an efficient way to manage books, user accounts, and purchases within an online bookstore.
 
 ## Journal
 
@@ -10,7 +10,7 @@ Implementation  and resolutions in the Journal section for a comprehensive overv
 
 - **User Authentication and Authorization:** Secure access to the system with user roles.
 - **Book Cataloging and Search:** Efficiently catalog books and search through available titles.
-- **Checkout and Return Book:** Manage book borrowing and return processes.
+- **Checkout and Return Book:** Checkout and return processes.
 
 ## Technologies
 
