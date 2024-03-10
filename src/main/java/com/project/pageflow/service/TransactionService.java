@@ -1,11 +1,13 @@
 package com.project.pageflow.service;
 
+import com.project.pageflow.dto.FormRequestDto;
 import com.project.pageflow.dto.InitiateOrderRequest;
 import com.project.pageflow.repository.TransactionRepository;
 
 import com.project.pageflow.models.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -15,25 +17,38 @@ import java.util.concurrent.TimeUnit;
 public class TransactionService {
     private final StudentService studentService;
     private final TransactionRepository transactionRepository;
+    private final CartItemService cartItemService;
+    private final ShoppingSessionService shoppingSessionService;
+    private final ShippingAddressService shippingAddressService;
+    private final PaymentMethodService paymentMethodService;
 
 
-    public TransactionService(StudentService studentService, TransactionRepository transactionRepository) {
+    public TransactionService(StudentService studentService,
+                              TransactionRepository transactionRepository,
+                              CartItemService cartItemService,
+                              ShoppingSessionService shoppingSessionService,
+                              ShippingAddressService shippingAddressService,
+                              PaymentMethodService paymentMethodService) {
+
         this.studentService = studentService;
-
-
         this.transactionRepository = transactionRepository;
+        this.cartItemService = cartItemService;
+        this.shoppingSessionService = shoppingSessionService;
+        this.shippingAddressService = shippingAddressService;
+        this.paymentMethodService = paymentMethodService;
     }
 
-    public void initiateTransaction(InitiateOrderRequest initiateOrderRequest, Authentication authentication) throws Exception {
+    @Transactional
+    public OrderStatus initiateTransaction(InitiateOrderRequest initiateOrderRequest, Authentication authentication) throws Exception {
         if (initiateOrderRequest.getOrderType() != OrderType.RETURN) {
-            checkoutBook(initiateOrderRequest, authentication);
-        }else {
-            returnBook(initiateOrderRequest,authentication);
+            return checkoutBook(initiateOrderRequest, authentication);
+        } else {
+            return returnBook(initiateOrderRequest, authentication);
         }
 
     }
 
-    private void checkoutBook(InitiateOrderRequest initiateOrderRequest, Authentication authentication) throws Exception {
+    private OrderStatus checkoutBook(InitiateOrderRequest initiateOrderRequest, Authentication authentication) throws Exception {
 
         Student student = studentService.getCurrentStudent(authentication);
         List<CartItem> cartItemList = initiateOrderRequest.getCartItemList();
@@ -43,27 +58,36 @@ public class TransactionService {
 
         validateRequest(student, cartItemList, shippingAddress, paymentMethod, totalOrder);
         Transaction transaction = processCheckoutTransaction(student, cartItemList, shippingAddress, paymentMethod, totalOrder);
+
+        return transaction.getOrderStatus();
     }
 
+
     private Transaction processCheckoutTransaction(Student student,
-                                                   List<CartItem> cartItems,
-                                                   ShippingAddress shippingAddress,
-                                                   PaymentMethod paymentMethod,
-                                                   BigDecimal totalOrder) {
+                                                  List<CartItem> cartItems,
+                                                  ShippingAddress shippingAddress,
+                                                  PaymentMethod paymentMethod,
+                                                  BigDecimal totalOrder) {
 
         Transaction transaction = buildTransaction(student, cartItems, shippingAddress, paymentMethod, totalOrder);
 
         try {
             saveTransaction(transaction);
             transaction.setOrderStatus(OrderStatus.SUCCESS);
-
+            handleShoppingCartSuccessAndCleanup(student.getShoppingSession());
         } catch (Exception e) {
             handleTransactionFailure(transaction);
-        }finally {
+        } finally {
             saveTransaction(transaction);
         }
 
         return transaction;
+    }
+
+    public void handleShoppingCartSuccessAndCleanup(ShoppingSession shoppingSession) {
+        cartItemService.cleanup(shoppingSession.getId());
+        shoppingSessionService.cleanup(shoppingSession);
+
     }
 
     private void saveTransaction(Transaction transaction) {
@@ -115,6 +139,7 @@ public class TransactionService {
         Optional<Transaction> lastTransaction = transactionRepository.findFirstByOrderByCreatedOnDesc();
         return lastTransaction.orElse(null);
     }
+
     /**
      * 1. Validate the book, student, admin and also validate if the book is issued to the same person
      * 2. Get the corresponding issuance transaction
@@ -122,7 +147,7 @@ public class TransactionService {
      * 4. Due date check, if due date - issue date > allowedDuration => fine calculation
      * 5. If there is no fine, de-allocate the book from student's name ===> book table
      */
-    private void returnBook(InitiateOrderRequest initiateOrderRequest, Authentication authentication) throws Exception {
+    private OrderStatus returnBook(InitiateOrderRequest initiateOrderRequest, Authentication authentication) throws Exception {
 //        Student student = getStudentFromOrderRequest(initiateOrderRequest);
 //        Book book = getBookFromOrderRequest(initiateOrderRequest);
 //
@@ -169,6 +194,8 @@ public class TransactionService {
 //        } finally {
 //            transactionRepository.save(transaction);
 //        }
+
+        return OrderStatus.PENDING;
     }
 
     private Integer calculateFine(Date issuanceTime) {
@@ -192,4 +219,33 @@ public class TransactionService {
         // save this transaction in DB
     }
 
+    public InitiateOrderRequest convertFormRequestToOrderRequest(FormRequestDto formRequestDto, Authentication authentication) {
+        Student currentStudent = studentService.getCurrentStudent(authentication);
+        ShoppingCartInfo shoppingCartInfo = shoppingSessionService.getShoppingCartInfo(currentStudent);
+        ShippingAddress shippingAddress = formRequestDto.getShippingAddress();
+        PaymentMethod payment = formRequestDto.getPayment();
+
+        updateStudentAddressAndPayment(currentStudent, shippingAddress, payment);
+
+        return createOrderRequest(payment, shippingAddress, shoppingCartInfo.getCartItems(), shoppingCartInfo.getShoppingSession());
+    }
+
+    public InitiateOrderRequest createOrderRequest(PaymentMethod paymentMethod,
+                                                    ShippingAddress shippingAddress,
+                                                    List<CartItem> cartItems,
+                                                    ShoppingSession shoppingSession) {
+
+
+        InitiateOrderRequest initiateOrderRequest = new InitiateOrderRequest();
+        initiateOrderRequest.setPaymentMethod(paymentMethod);
+        initiateOrderRequest.setShippingAddress(shippingAddress);
+        initiateOrderRequest.setCartItemList(cartItems);
+        initiateOrderRequest.setTotal(shoppingSession.getTotal());
+
+        return initiateOrderRequest;
+    }
+    public void updateStudentAddressAndPayment(Student currentStudent, ShippingAddress shippingAddress, PaymentMethod payment) {
+        shippingAddressService.setStudent(currentStudent,shippingAddress);
+        paymentMethodService.setStudent(currentStudent,payment);
+    }
 }

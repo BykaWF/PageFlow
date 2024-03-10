@@ -29,7 +29,7 @@ public class ShoppingSessionService {
             ShoppingSession shoppingSession = new ShoppingSession();
             shoppingSession.setStudent(student);
             student.setShoppingSession(shoppingSession);
-            shoppingSession.setTotal(new BigDecimal("0.00"));
+            setDefaultTotal(shoppingSession);
 
             shoppingSessionRepository.save(shoppingSession);
         }
@@ -56,5 +56,13 @@ public class ShoppingSessionService {
 
     public BigDecimal getTotal(List<CartItem> cartItems){
        return cartItems.stream().map(CartItem::getSubtotal).reduce(BigDecimal.ZERO,BigDecimal::add);
+    }
+
+    public void cleanup(ShoppingSession shoppingSession) {
+        setDefaultTotal(shoppingSession);
+    }
+
+    public void setDefaultTotal(ShoppingSession shoppingSession){
+        shoppingSession.setTotal(new BigDecimal("0.00"));
     }
 }

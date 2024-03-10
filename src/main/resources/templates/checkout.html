@@ -143,7 +143,7 @@
                         <tbody id="cart-items">
                         <tr th:each="cartItem : ${cartItems}">
                             <td class="border-0 align-middle">
-                                <img th:src="${cartItem.book.imgURL}" alt="Book Image" class="img-fluid rounded">
+                                <img th:src="${cartItem.book.imgURL}" alt="Book Image" class="img-fluid rounded" style="width: 40px; height: 60px;">
                                 <strong class="ms-2" th:text="${cartItem.book.title}">Book Title</strong>
                             </td>
                             <td class="border-0 align-middle" th:text="${' $' + cartItem.subtotal}">$0.00</td>

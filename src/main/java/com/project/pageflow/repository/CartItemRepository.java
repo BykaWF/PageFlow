@@ -17,4 +17,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     boolean isBookAlreadyInCart(@Param("session") ShoppingSession shoppingSession, @Param("book") Book book);
 
     CartItem findCartItemByBook(Book book);
+
+    void deleteAllByShoppingSession_Id(Long shoppingSessionId);
 }

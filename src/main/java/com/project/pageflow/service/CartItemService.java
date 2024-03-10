@@ -73,4 +73,7 @@ public class CartItemService {
         cartItemRepository.save(cartItemByBook);
     }
 
+    public void cleanup(Long shoppingSessionId) {
+        cartItemRepository.deleteAllByShoppingSession_Id(shoppingSessionId);
+    }
 }
