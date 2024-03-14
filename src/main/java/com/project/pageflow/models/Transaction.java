@@ -37,9 +37,6 @@ public class Transaction {
     @ManyToOne
     private Admin admin;
 
-    @OneToMany(mappedBy = "transaction")
-    private List<CartItem> cartItems;
-
     @ManyToOne
     private PaymentMethod paymentMethod;
 

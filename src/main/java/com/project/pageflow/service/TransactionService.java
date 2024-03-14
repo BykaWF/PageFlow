@@ -57,13 +57,13 @@ public class TransactionService {
         BigDecimal totalOrder = initiateOrderRequest.getTotal();
 
         validateRequest(student, cartItemList, shippingAddress, paymentMethod, totalOrder);
+        // this student has a default payment method, or he doesn't have it
         Transaction transaction = processCheckoutTransaction(student, cartItemList, shippingAddress, paymentMethod, totalOrder);
 
         return transaction.getOrderStatus();
     }
 
-
-    private Transaction processCheckoutTransaction(Student student,
+    public Transaction processCheckoutTransaction(Student student,
                                                   List<CartItem> cartItems,
                                                   ShippingAddress shippingAddress,
                                                   PaymentMethod paymentMethod,
@@ -74,7 +74,8 @@ public class TransactionService {
         try {
             saveTransaction(transaction);
             transaction.setOrderStatus(OrderStatus.SUCCESS);
-            handleShoppingCartSuccessAndCleanup(student.getShoppingSession());
+            handleShoppingCartBalance(student.getShoppingSession());
+            handleCartItemsStatus(cartItems, transaction);
         } catch (Exception e) {
             handleTransactionFailure(transaction);
         } finally {
@@ -84,8 +85,16 @@ public class TransactionService {
         return transaction;
     }
 
-    public void handleShoppingCartSuccessAndCleanup(ShoppingSession shoppingSession) {
-        cartItemService.cleanup(shoppingSession.getId());
+    private void handleCartItemsStatus(List<CartItem> cartItems, Transaction transaction) {
+
+        for (CartItem ct : cartItems) {
+            ct.setStatus(CartItemsStatus.PURCHASED);
+            ct.setTransactionId(transaction.getTransactionId());
+        }
+
+    }
+
+    public void handleShoppingCartBalance(ShoppingSession shoppingSession) {
         shoppingSessionService.cleanup(shoppingSession);
 
     }
@@ -110,7 +119,6 @@ public class TransactionService {
         return Transaction.builder()
                 .transactionId(UUID.randomUUID().toString())
                 .student(student)
-                .cartItems(cartItems)
                 .shippingAddress(shippingAddress)
                 .paymentMethod(paymentMethod)
                 .totalOrder(totalOrder)
@@ -231,9 +239,9 @@ public class TransactionService {
     }
 
     public InitiateOrderRequest createOrderRequest(PaymentMethod paymentMethod,
-                                                    ShippingAddress shippingAddress,
-                                                    List<CartItem> cartItems,
-                                                    ShoppingSession shoppingSession) {
+                                                   ShippingAddress shippingAddress,
+                                                   List<CartItem> cartItems,
+                                                   ShoppingSession shoppingSession) {
 
 
         InitiateOrderRequest initiateOrderRequest = new InitiateOrderRequest();
@@ -244,8 +252,13 @@ public class TransactionService {
 
         return initiateOrderRequest;
     }
+
     public void updateStudentAddressAndPayment(Student currentStudent, ShippingAddress shippingAddress, PaymentMethod payment) {
-        shippingAddressService.setStudent(currentStudent,shippingAddress);
-        paymentMethodService.setStudent(currentStudent,payment);
+            shippingAddressService.setStudent(currentStudent, shippingAddress);
+            paymentMethodService.setStudent(currentStudent, payment);
+    }
+
+    public List<Transaction> getOrdersOfCurrentStudent(Student currentStudent) {
+        return transactionRepository.findTransactionByStudent(currentStudent);
     }
 }

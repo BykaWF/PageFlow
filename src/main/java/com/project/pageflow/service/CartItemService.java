@@ -1,10 +1,7 @@
 package com.project.pageflow.service;
 
 import com.project.pageflow.dto.CartItemDto;
-import com.project.pageflow.models.Book;
-import com.project.pageflow.models.CartItem;
-import com.project.pageflow.models.ShoppingSession;
-import com.project.pageflow.models.Student;
+import com.project.pageflow.models.*;
 import com.project.pageflow.repository.CartItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+
+import static com.project.pageflow.models.CartItemsStatus.PENDING;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +27,7 @@ public class CartItemService {
 
         ensureShoppingSessionExists(currentShoppingSession);
 
-        if (cartItemRepository.isBookAlreadyInCart(currentShoppingSession, book)) {
+        if (cartItemRepository.findCartItemByBookAndStatus(book, PENDING) != null) {
             updateExistingCartItem(book, cartItemDto.getQuantity());
         } else {
             addNewCartItem(cartItemDto, book, currentShoppingSession, cartItemDto.getQuantity());
@@ -38,7 +37,8 @@ public class CartItemService {
     private void addNewCartItem(CartItemDto cartItemDto, Book book, ShoppingSession currentShoppingSession, Integer quantity) {
         CartItem cartItem = cartItemDto.toItem();
         cartItem.setBook(book);
-        cartItem.setShoppingSession(currentShoppingSession);
+        cartItem.setStatus(PENDING);
+        cartItem.setShoppingSessionId(currentShoppingSession.getId());
         setSubtotalForBook(cartItem, book);
         cartItemRepository.save(cartItem);
 
@@ -55,7 +55,7 @@ public class CartItemService {
     }
 
     public List<CartItem> getCartItems(Long sessionId) {
-        return cartItemRepository.findCartItemByShoppingSessionId(sessionId);
+        return cartItemRepository.findCartItemByShoppingSessionIdAndStatus(sessionId,PENDING);
     }
 
     private Book getBookById(Integer bookId) {
@@ -67,13 +67,28 @@ public class CartItemService {
     }
 
     public void updateExistingCartItem(Book book, Integer quantity) {
-        CartItem cartItemByBook = cartItemRepository.findCartItemByBook(book);
+        CartItem cartItemByBook = cartItemRepository.findCartItemByBookAndStatus(book, PENDING);
         cartItemByBook.setQuantity(quantity);
         setSubtotalForBook(cartItemByBook, book);
         cartItemRepository.save(cartItemByBook);
     }
 
     public void cleanup(Long shoppingSessionId) {
-        cartItemRepository.deleteAllByShoppingSession_Id(shoppingSessionId);
+        cartItemRepository.deleteAllByShoppingSessionId(shoppingSessionId);
+    }
+
+    public List<CartItem> getPurchasedCartItems(String transactionId) {
+        if (transactionId != null) {
+            return cartItemRepository.findCartItemByTransactionId(transactionId);
+        } else {
+            throw new IllegalArgumentException("Transaction id is null");
+        }
+    }
+
+    public List<CartItem> getPendingCartItems(List<CartItem> cartItems) {
+        return cartItems
+                .stream()
+                .filter(cartItem -> cartItem.getStatus().equals(PENDING))
+                .toList();
     }
 }

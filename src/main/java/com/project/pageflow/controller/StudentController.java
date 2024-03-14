@@ -22,10 +22,7 @@ public class StudentController {
 
     private UserService userService;
 
-    /**
-     * Endpoint to retrieve information about the currently authenticated student.
-     * @return ResponseEntity with the student information response.
-     */
+
     @GetMapping("/student-info")
     @PreAuthorize("isAuthenticated()")
     public String getInfoAboutStudent(Model model, Authentication authentication){
@@ -45,6 +42,5 @@ public class StudentController {
         }else {
             return "login";
         }
-
     }
 }

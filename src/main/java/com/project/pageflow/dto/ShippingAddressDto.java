@@ -30,6 +30,7 @@ public class ShippingAddressDto {
                 .city(this.city)
                 .country(this.country)
                 .postalCode(this.postalCode)
+                .isDefaultAddress(true)
                 .build();
     }
 }

@@ -69,34 +69,47 @@
 
             <!-- Main Content -->
             <div class="col-lg-9">
-                <section id="userInfo" class="py-5">
-                    <div class="container" style="border-right-style: solid;border-right-width: 0;padding-right: 500px;">
-                        <div class="form-group">
-                            <label for="firstName">First Name:</label>
-                            <input type="text" class="form-control" id="firstName" th:value="${student.firstName}">
-                        </div>
+                <section id="addressInfo" class="py-5">
+                    <div class="container" th:if="${shippingAddress == null}">
+                        <!-- Address Form -->
+                        <form th:action="@{/saveAddress}"  method="post">
+                            <div class="form-group">
+                                <label for="streetAddress">Street Address:</label>
+                                <input type="text" class="form-control" id="streetAddress" name="streetAddress">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="secondName">Second Name:</label>
-                            <input type="text" class="form-control" id="secondName" th:value="${student.secondName}">
-                        </div>
+                            <div class="form-group">
+                                <label for="city">City:</label>
+                                <input type="text" class="form-control" id="city" name="city">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="email">E-Mail:</label>
-                            <input type="email" class="form-control" id="email" th:value="${student.email}">
-                        </div>
+                            <div class="form-group">
+                                <label for="postalCode">Postal Code:</label>
+                                <input type="text" class="form-control" id="postalCode" name="postalCode">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="rollNumber">Roll Number:</label>
-                            <input type="text" class="form-control" id="rollNumber" th:value="${student.rollNumber}">
-                        </div>
+                            <div class="form-group">
+                                <label for="country">Country:</label>
+                                <input type="text" class="form-control" id="country" name="country">
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary">Save Address</button>
+                        </form>
+                    </div>
+                    <div class="container" th:if="${shippingAddress != null}">
+                        <p>Shipping Address:</p>
+                        <p th:text="${shippingAddress.streetAddress}"></p>
+                        <p th:text="${shippingAddress.city}"></p>
+                        <p th:text="${shippingAddress.postalCode}"></p>
+                        <p th:text="${shippingAddress.country}"></p>
                     </div>
                 </section>
             </div>
         </div>
     </div>
-
 </section>
+
 
 <footer class="bg-dark py-4 mt-auto">
     <div class="container px-5">

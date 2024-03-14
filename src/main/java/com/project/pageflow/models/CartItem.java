@@ -30,15 +30,15 @@ public class CartItem {
 
     private Integer quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "shopping_session_id")
-    private ShoppingSession shoppingSession;
+    @Column(name = "shopping_session_id")
+    private Long shoppingSessionId;
 
-    @ManyToOne
-    @JoinColumn(name = "transaction_id")
-    private Transaction transaction;
+    private String transactionId;
 
     private BigDecimal subtotal;
+
+    @Enumerated(EnumType.STRING)
+    private CartItemsStatus status;
 
     @CreationTimestamp
     private Date createdOn;

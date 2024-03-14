@@ -23,4 +23,16 @@ public class PaymentMethodService implements ServiceHelper<PaymentMethod> {
     public void saveEntity(PaymentMethod paymentMethod){
         paymentMethodRepository.save(paymentMethod);
     }
+
+    @Override
+    public void createOrUpdateEntity(PaymentMethod paymentMethod, Student student) {
+        setStudent(student,paymentMethod);
+        saveEntity(paymentMethod);
+    }
+
+    public PaymentMethod getPaymentMethodOfCurrentStudent(Student currentStudent) {
+        return paymentMethodRepository.findPaymentMethodByStudentAndIsDefaultPaymentMethod(currentStudent,true);
+    }
+
+
 }

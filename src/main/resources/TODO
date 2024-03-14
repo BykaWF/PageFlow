@@ -1,5 +1,45 @@
 To-Do:
 
+    March 14, 2024:
+
+        TRANSACTION_SERVICE :
+            Add logic of address and payment method if it's exist, also solve problem with unique address
+            (if address and payment method isn't define setStudent ) / otherwise just used only for transaction and do not store it
+            -> it'll solve problem with unique value
+
+            // two checkout as who doesn't have a address and payment method
+            need logic like set or use as default
+
+        UI:
+            Make prettier account info page ( payment info and so on)
+
+
+        Payment Info , Address Info,  Student Info:
+            Add updating logic
+
+
+
+        Low Priority:
+            If we don't have items to show in success page, redirect to something
+            Add AI futures ( something basic, but with value)
+            Update logic to all student-info
+
+
+
+
+
+Completed Tasks:
+
+    March 14, 2024:
+        Add orders controller
+        TODO solve problem with
+        java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'paymentMethod' available as request attribute
+        	at org.springframework.web.servlet.support.BindStatus.<init>(BindStatus.java:153) ~[spring-webmvc-6.1.2.jar:6.1.2]
+        	at org.springframework.web.servlet.support.RequestContext.getBindStatus(RequestContext.java:926) ~[spring-webmvc-6.1.2.jar:6.1.2]
+
+        	use a Idea of /register
+
+
     March 5, 2024:
         logic to display a purchased items
         and checkout page( do not show if we don't have items )
@@ -7,8 +47,6 @@ To-Do:
         Solve problem with displayed cartItems ( it worked before I change controller iml,
         try to see in main what is the diff
 
-
-Completed Tasks:
     March 4, 2024:
         In cartItem change size of images
         Add link to checkout page - /cart

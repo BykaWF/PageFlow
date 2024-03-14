@@ -29,4 +29,7 @@ public class ShippingAddress {
     @JoinColumn(name = "stud_id")
     private Student student;
 
+    @Column(name = "default_address")
+    private Boolean isDefaultAddress;
+
 }
