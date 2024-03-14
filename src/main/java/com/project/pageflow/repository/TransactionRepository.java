@@ -14,4 +14,6 @@ import java.util.Optional;
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
     Optional<Transaction> findFirstByOrderByCreatedOnDesc();
+
+    List<Transaction> findTransactionByStudent(Student student);
 }

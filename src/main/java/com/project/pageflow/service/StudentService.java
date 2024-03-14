@@ -1,5 +1,7 @@
 package com.project.pageflow.service;
 
+import com.project.pageflow.models.PaymentMethod;
+import com.project.pageflow.models.ShippingAddress;
 import com.project.pageflow.models.Student;
 import com.project.pageflow.repository.StudentRepository;
 import com.project.pageflow.models.SecuredUser;
@@ -18,9 +20,11 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final UserService userService;
 
-    public StudentService(StudentRepository studentRepository, UserService userService) {
+    public StudentService(StudentRepository studentRepository,
+                          UserService userService) {
         this.studentRepository = studentRepository;
         this.userService = userService;
+
     }
 
     public Student getCurrentStudent(Authentication authentication){
@@ -46,9 +50,5 @@ public class StudentService {
     public Optional<Student> find(Integer studentId){
         return studentRepository.findById(studentId);
     }
-
-
-
-
 
 }

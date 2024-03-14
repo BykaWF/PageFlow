@@ -9,6 +9,7 @@ import com.project.pageflow.repository.StudentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ShoppingSessionService {
             ShoppingSession shoppingSession = new ShoppingSession();
             shoppingSession.setStudent(student);
             student.setShoppingSession(shoppingSession);
-            shoppingSession.setTotal(new BigDecimal("0.00"));
+            setDefaultTotal(shoppingSession);
 
             shoppingSessionRepository.save(shoppingSession);
         }
@@ -56,5 +57,14 @@ public class ShoppingSessionService {
 
     public BigDecimal getTotal(List<CartItem> cartItems){
        return cartItems.stream().map(CartItem::getSubtotal).reduce(BigDecimal.ZERO,BigDecimal::add);
+    }
+
+    public void cleanup(ShoppingSession shoppingSession) {
+        setDefaultTotal(shoppingSession);
+        shoppingSessionRepository.save(shoppingSession);
+    }
+
+    public void setDefaultTotal(ShoppingSession shoppingSession){
+        shoppingSession.setTotal(new BigDecimal("0.00"));
     }
 }

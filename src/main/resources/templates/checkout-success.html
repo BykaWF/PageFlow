@@ -63,7 +63,7 @@
                     </div>
                     <h3 class="mb-3">Items Purchased:</h3>
                     <ul class="list-group mb-4">
-                        <li th:each="item : ${transaction.cartItems}" class="list-group-item d-flex justify-content-between align-items-center">
+                        <li th:each="item : ${cartItems}" class="list-group-item d-flex justify-content-between align-items-center">
                             <span class="product-title" th:text="${item.book.title}"></span>
                             <span class="badge badge-primary badge-pill">$<span th:text="${item.subtotal}"></span></span>
                         </li>

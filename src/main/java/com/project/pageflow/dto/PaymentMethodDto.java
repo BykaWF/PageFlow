@@ -28,6 +28,7 @@ public class PaymentMethodDto {
     @NotNull
     private Integer expirationYear;
 
+
     public PaymentMethod toPaymentMethod(){
 
         return PaymentMethod.builder()
@@ -36,6 +37,7 @@ public class PaymentMethodDto {
                 .cardNumber(this.cardNumber)
                 .expirationYear(this.expirationYear)
                 .expirationMonth(this.expirationMonth)
+                .isDefaultPaymentMethod(true)
                 .build();
     }
 }

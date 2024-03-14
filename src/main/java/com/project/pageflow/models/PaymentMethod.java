@@ -32,5 +32,7 @@ public class PaymentMethod {
     @JoinColumn(name = "student_id")
     private Student student;
 
+    @Column(name = "default_payment")
+    private Boolean isDefaultPaymentMethod;
 
 }

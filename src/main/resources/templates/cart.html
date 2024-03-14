@@ -76,7 +76,7 @@
                         <!-- Dynamically populate cart items using Thymeleaf -->
                         <tr th:each="cartItem : ${cartItems}">
                             <td class="border-0 align-middle">
-                                <img th:src="${cartItem.book.imgURL}" alt="Book Image" class="img-fluid rounded">
+                                <img th:src="${cartItem.book.imgURL}" alt="Book Image" class="img-fluid rounded" style="width: 40px; height: 60px;">
                                 <strong class="ms-2" th:text="${cartItem.book.title}">Book Title</strong>
                             </td>
                             <td class="border-0 align-middle" th:text="${' $' + cartItem.subtotal}">$0.00</td>
@@ -114,7 +114,7 @@
                         <h5 class="card-title">Cart Summary</h5>
                         <!-- Dynamically populate total price using Thymeleaf -->
                         <p class="card-text" th:text="'Total: $' + ${shoppingSession.total}">Total: $0.00</p>
-                        <a href="#" class="btn btn-primary">Checkout</a>
+                        <a th:href="@{/checkout}" class="btn btn-primary">Checkout</a>
                     </div>
                 </div>
             </div>

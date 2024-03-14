@@ -1,7 +1,9 @@
 package com.project.pageflow.controller;
 
 import com.project.pageflow.dto.CartItemDto;
+import com.project.pageflow.models.CartItem;
 import com.project.pageflow.models.ShoppingCartInfo;
+import com.project.pageflow.models.ShoppingSession;
 import com.project.pageflow.service.BookService;
 import com.project.pageflow.service.CartItemService;
 import com.project.pageflow.service.ShoppingSessionService;
@@ -12,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @AllArgsConstructor
@@ -27,9 +31,10 @@ public class CartItemController {
     public String getCartItems(Model model,Authentication authentication){
 
         ShoppingCartInfo shoppingCartInfo = shoppingSessionService.getShoppingCartInfo(studentService.getCurrentStudent(authentication));
-
-        model.addAttribute("cartItems", shoppingCartInfo.getCartItems());
-        model.addAttribute("shoppingSession", shoppingCartInfo.getShoppingSession());
+        List<CartItem> pendingCartItems = cartItemService.getPendingCartItems(shoppingCartInfo.getCartItems());
+        ShoppingSession shoppingSession = studentService.getCurrentStudent(authentication).getShoppingSession();
+        model.addAttribute("cartItems", pendingCartItems);
+        model.addAttribute("shoppingSession",shoppingSession);
 
         return "cart";
     }

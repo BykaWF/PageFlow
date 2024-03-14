@@ -26,9 +26,6 @@ public class ShoppingSession {
 
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "shoppingSession")
-    private List<CartItem> cartItems;
-
     @CreationTimestamp
     private Date createdOn;
 

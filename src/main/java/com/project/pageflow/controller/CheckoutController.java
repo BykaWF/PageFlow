@@ -2,11 +2,7 @@ package com.project.pageflow.controller;
 
 import com.project.pageflow.dto.FormRequestDto;
 import com.project.pageflow.dto.InitiateOrderRequest;
-import com.project.pageflow.dto.PaymentMethodDto;
-import com.project.pageflow.dto.ShippingAddressDto;
 import com.project.pageflow.models.*;
-import com.project.pageflow.repository.PaymentMethodRepository;
-import com.project.pageflow.repository.ShippingAddressRepository;
 import com.project.pageflow.service.*;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,18 +18,21 @@ public class CheckoutController {
     private final TransactionService transactionService;
     private final ShoppingSessionService shoppingSessionService;
     private final StudentService studentService;
+    private final CartItemService cartItemService;
 
-    private final PaymentMethodRepository paymentMethodRepository;
-    private final ShippingAddressRepository shippingAddressRepository;
+    private final PaymentMethodService paymentMethodService;
+    private final ShippingAddressService shippingAddressService;
 
-
-    public CheckoutController(TransactionService transactionService, ShoppingSessionService shoppingSessionService, StudentService studentService, PaymentMethodRepository paymentMethodRepository, ShippingAddressRepository shippingAddressRepository) {
+    public CheckoutController(TransactionService transactionService,
+                              ShoppingSessionService shoppingSessionService,
+                              StudentService studentService, CartItemService cartItemService, PaymentMethodService paymentMethodService, ShippingAddressService shippingAddressService
+    ) {
         this.transactionService = transactionService;
         this.shoppingSessionService = shoppingSessionService;
-
         this.studentService = studentService;
-        this.paymentMethodRepository = paymentMethodRepository;
-        this.shippingAddressRepository = shippingAddressRepository;
+        this.cartItemService = cartItemService;
+        this.paymentMethodService = paymentMethodService;
+        this.shippingAddressService = shippingAddressService;
     }
 
 
@@ -41,45 +40,28 @@ public class CheckoutController {
     @PreAuthorize("isAuthenticated()")
     public String initiateTransaction(@Valid FormRequestDto formRequestDto, Authentication authentication) throws Exception {
 
-        ShoppingCartInfo shoppingCartInfo = shoppingSessionService.getShoppingCartInfo(studentService.getCurrentStudent(authentication));
-        ShippingAddress shippingAddress = formRequestDto.getShippingAddress();
-        PaymentMethod payment = formRequestDto.getPayment();
+        InitiateOrderRequest initiateOrderRequest = transactionService.convertFormRequestToOrderRequest(formRequestDto,authentication);
+        OrderStatus orderStatus = transactionService.initiateTransaction(initiateOrderRequest, authentication);
 
-        shippingAddressRepository.save(shippingAddress);
-        paymentMethodRepository.save(payment);
-        InitiateOrderRequest initiateOrderRequest = initiateOrderRequest(payment,
-                shippingAddress,
-                shoppingCartInfo.getCartItems(),
-                shoppingCartInfo.getShoppingSession());
+        if (orderStatus == OrderStatus.SUCCESS) {
+            return "redirect:/checkout-success";
+        } else {
+            return "checkout";
+        }
 
-        transactionService.initiateTransaction(initiateOrderRequest, authentication);
-
-
-       return "redirect:/checkout-success";
     }
 
     @GetMapping("/checkout-success")
     @PreAuthorize("isAuthenticated()")
-    public String getCheckoutSuccessPage(Model model){
+    public String getCheckoutSuccessPage(Model model, Authentication authentication) {
+
         Transaction transaction = transactionService.getLastTransaction();
+        List<CartItem> purchasedCartItems = cartItemService.getPurchasedCartItems(transaction.getTransactionId());
+
+
         model.addAttribute("transaction", transaction);
-
+        model.addAttribute("cartItems", purchasedCartItems);
         return "checkout-success";
-    }
-
-    private InitiateOrderRequest initiateOrderRequest(PaymentMethod paymentMethod,
-                                      ShippingAddress shippingAddress,
-                                      List<CartItem> cartItems,
-                                      ShoppingSession shoppingSession) {
-
-
-        InitiateOrderRequest initiateOrderRequest = new InitiateOrderRequest();
-        initiateOrderRequest.setPaymentMethod(paymentMethod);
-        initiateOrderRequest.setShippingAddress(shippingAddress);
-        initiateOrderRequest.setCartItemList(cartItems);
-        initiateOrderRequest.setTotal(shoppingSession.getTotal());
-
-        return initiateOrderRequest;
     }
 
     @GetMapping("/checkout")
