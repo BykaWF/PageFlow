@@ -7,4 +7,5 @@ public interface ServiceHelper<T> {
     void saveEntity(T entity);
 
     void createOrUpdateEntity(T entity, Student student);
+
 }

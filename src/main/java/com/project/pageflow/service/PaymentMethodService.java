@@ -6,6 +6,8 @@ import com.project.pageflow.repository.PaymentMethodRepository;
 import com.project.pageflow.util.ServiceHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PaymentMethodService implements ServiceHelper<PaymentMethod> {
     private final PaymentMethodRepository paymentMethodRepository;
@@ -35,4 +37,11 @@ public class PaymentMethodService implements ServiceHelper<PaymentMethod> {
     }
 
 
+    public Optional<PaymentMethod> findById(Long paymentId) {
+        return paymentMethodRepository.findById(paymentId);
+    }
+
+    public void updatePaymentMethod(PaymentMethod updatedPaymentMethod) {
+        paymentMethodRepository.save(updatedPaymentMethod);
+    }
 }

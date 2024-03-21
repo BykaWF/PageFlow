@@ -70,7 +70,7 @@
             <!-- Main Content -->
             <div class="col-lg-9">
                 <section id="paymentInfo" class="py-5">
-                    <div class="container">
+                    <div class="container" style="border-right-style: solid;border-right-width: 0;padding-right: 500px;" >
 
                         <div th:if="${paymentMethod == null}">
                             <!-- Payment Method Form -->
@@ -104,19 +104,43 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary">Save Payment Method</button>
+                                <button type="submit" style="margin-top: 15px;" class="btn btn-primary">Save Payment Method</button>
                             </form>
                         </div>
 
                         <div th:if="${paymentMethod != null}">
                             <!-- Display existing payment method details -->
-                            <h2>Existing Payment Method:</h2>
-                            <p>Payment Type: <span th:text="${paymentMethod.type}"></span></p>
-                            <p>Card Number: <span th:text="${paymentMethod.cardNumber}"></span></p>
-                            <p>Cardholder Name: <span th:text="${paymentMethod.cardHolderName}"></span></p>
-                            <p>Expiration Month: <span th:text="${paymentMethod.expirationMonth}"></span></p>
-                            <p>Expiration Year: <span th:text="${paymentMethod.expirationYear}"></span></p>
-                            <!-- Add additional details as needed -->
+                            <form th:action="@{/updatePaymentMethod}" th:object="${paymentMethod}" method="post">
+                                <input type="hidden" id="paymentId" th:field="${paymentMethod.paymentId}" >
+                                <div class="container">
+                                <div class="py-3">
+                                    <div class="form-group">
+                                        <label for="paymentTypeNotNull">Payment Type:</label>
+                                        <select class="form-control" id="paymentTypeNotNull" th:field="${paymentMethod.type}">
+                                            <option value="CREDIT_CARD" th:selected="${paymentMethod.type == 'CREDIT_CARD'}">Credit Card</option>
+                                            <option value="DEBIT_CARD" th:selected="${paymentMethod.type == 'DEBIT_CARD'}">Debit Card</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardNumberNotNull">Card Number:</label>
+                                        <input type="text" class="form-control" id="cardNumberNotNull" th:field="${paymentMethod.cardNumber}" >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardHolderNameNotNull">Cardholder Name:</label>
+                                        <input type="text" class="form-control" id="cardHolderNameNotNull" th:field="${paymentMethod.cardHolderName}" >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="expirationMonthNotNull">Expiration Month:</label>
+                                        <input type="text" class="form-control" id="expirationMonthNotNull" th:field="${paymentMethod.expirationMonth}" >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="expirationYearNotNull">Expiration Year:</label>
+                                        <input type="text" class="form-control" id="expirationYearNotNull" th:field="${paymentMethod.expirationYear}" >
+                                    </div>
+                                    <button type="submit" style="margin-top: 15px;" class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+                            </form>
                         </div>
                     </div>
                 </section>
@@ -131,10 +155,6 @@
         <div class="row align-items-center justify-content-between flex-column flex-sm-row">
             <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; PAGE&FLOW 2024</div></div>
             <div class="col-auto">
-                <a class="link-light small" href="#!">Privacy</a>
-                <span class="text-white mx-1">&middot;</span>
-                <a class="link-light small" href="#!">Terms</a>
-                <span class="text-white mx-1">&middot;</span>
                 <a class="link-light small" href="https://yaprozorov.super.site/">Contact</a>
             </div>
         </div>

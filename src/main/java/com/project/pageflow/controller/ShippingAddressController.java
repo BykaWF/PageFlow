@@ -1,6 +1,7 @@
 package com.project.pageflow.controller;
 
 import com.project.pageflow.dto.ShippingAddressDto;
+import com.project.pageflow.models.PaymentMethod;
 import com.project.pageflow.models.ShippingAddress;
 import com.project.pageflow.service.ShippingAddressService;
 import com.project.pageflow.service.StudentService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -41,6 +44,24 @@ public class ShippingAddressController {
 
         return "redirect:/address";
     }
+
+    @PostMapping("/updateAddress")
+    @PreAuthorize("isAuthenticated()")
+    public String updatePaymentMethod(@ModelAttribute("shippingAddress") ShippingAddress shippingAddress, Authentication authentication){
+        Optional<ShippingAddress> oldShippingAddress = shippingAddressService.findById(shippingAddress.getAddressId());
+
+        if(oldShippingAddress.isPresent()){
+            ShippingAddress updatedShippingAddress = oldShippingAddress.get();
+            updatedShippingAddress.setStreetAddress(shippingAddress.getStreetAddress());
+            updatedShippingAddress.setCity(shippingAddress.getCity());
+            updatedShippingAddress.setCountry(shippingAddress.getCountry());
+            updatedShippingAddress.setPostalCode(shippingAddress.getPostalCode());
+            shippingAddressService.updateShippingAddress(updatedShippingAddress);
+        }
+        return "redirect:/address";
+    }
+
+
 
 
 }

@@ -70,27 +70,31 @@
             <!-- Main Content -->
             <div class="col-lg-9">
                 <section id="userInfo" class="py-5">
+                    <form th:action="@{/updateStudent}" th:object="${student}" method="post">
                     <div class="container" style="border-right-style: solid;border-right-width: 0;padding-right: 500px;">
                         <div class="form-group">
+                            <input type="hidden" id="stud_id" th:field="${student.id}" >
                             <label for="firstName">First Name:</label>
-                            <input type="text" class="form-control" id="firstName" th:value="${student.firstName}">
+                            <input type="text" class="form-control" id="firstName" th:field="${student.firstName}">
                         </div>
 
                         <div class="form-group">
                             <label for="secondName">Second Name:</label>
-                            <input type="text" class="form-control" id="secondName" th:value="${student.secondName}">
+                            <input type="text" class="form-control" id="secondName" th:field="${student.secondName}">
                         </div>
 
                         <div class="form-group">
                             <label for="email">E-Mail:</label>
-                            <input type="email" class="form-control" id="email" th:value="${student.email}">
+                            <input type="email" class="form-control" id="email" th:field="${student.email}">
                         </div>
 
                         <div class="form-group">
                             <label for="rollNumber">Roll Number:</label>
-                            <input type="text" class="form-control" id="rollNumber" th:value="${student.rollNumber}">
+                            <input type="text" class="form-control" id="rollNumber" th:field="${student.rollNumber}">
                         </div>
                     </div>
+                        <button type="submit" style="margin-top: 15px;" class="btn btn-primary">Update</button>
+                    </form>
                 </section>
             </div>
         </div>
@@ -103,10 +107,6 @@
         <div class="row align-items-center justify-content-between flex-column flex-sm-row">
             <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; PAGE&FLOW 2024</div></div>
             <div class="col-auto">
-                <a class="link-light small" href="#!">Privacy</a>
-                <span class="text-white mx-1">&middot;</span>
-                <a class="link-light small" href="#!">Terms</a>
-                <span class="text-white mx-1">&middot;</span>
                 <a class="link-light small" href="https://yaprozorov.super.site/">Contact</a>
             </div>
         </div>

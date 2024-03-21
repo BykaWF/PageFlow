@@ -7,6 +7,8 @@ import com.project.pageflow.util.ServiceHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class ShippingAddressService implements ServiceHelper<ShippingAddress> {
@@ -34,4 +36,11 @@ public class ShippingAddressService implements ServiceHelper<ShippingAddress> {
         return shippingAddressRepository.findShippingAddressByStudentAndIsDefaultAddress(currentStudent,true);
     }
 
+    public Optional<ShippingAddress> findById(Long addressId) {
+        return shippingAddressRepository.findById(addressId);
+    }
+
+    public void updateShippingAddress(ShippingAddress updatedShippingAddress) {
+        shippingAddressRepository.save(updatedShippingAddress);
+    }
 }

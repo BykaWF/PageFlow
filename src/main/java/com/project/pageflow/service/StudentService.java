@@ -1,15 +1,12 @@
 package com.project.pageflow.service;
 
-import com.project.pageflow.models.PaymentMethod;
-import com.project.pageflow.models.ShippingAddress;
+import com.project.pageflow.excetption.UsernameIsNotAvailableException;
 import com.project.pageflow.models.Student;
 import com.project.pageflow.repository.StudentRepository;
 import com.project.pageflow.models.SecuredUser;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 import static com.project.pageflow.util.Constant.STUDENT_USER;
@@ -27,10 +24,10 @@ public class StudentService {
 
     }
 
-    public Student getCurrentStudent(Authentication authentication){
+    public Student getCurrentStudent(Authentication authentication) {
         Object principal = authentication.getPrincipal();
 
-        if(principal instanceof SecuredUser){
+        if (principal instanceof SecuredUser) {
             return ((SecuredUser) principal).getStudent();
         }
         return null;
@@ -38,17 +35,23 @@ public class StudentService {
     }
 
     public void createStudent(Student student) {
-
+        // if student do not exist already in db with this password an
         SecuredUser securedUser = student.getSecuredUser();
-        securedUser = userService.save(securedUser, STUDENT_USER);
-
-        student.setSecuredUser(securedUser);
-        studentRepository.save(student);
+        if (userService.isUsernameAvailable(securedUser)) {
+            securedUser = userService.save(securedUser, STUDENT_USER);
+            student.setSecuredUser(securedUser);
+            studentRepository.save(student);
+        } else {
+            throw new UsernameIsNotAvailableException(securedUser.getUsername() + " is not available !");
+        }
     }
 
 
-    public Optional<Student> find(Integer studentId){
+    public Optional<Student> find(Integer studentId) {
         return studentRepository.findById(studentId);
     }
 
+    public void updateStudent(Student student) {
+        studentRepository.save(student);
+    }
 }
