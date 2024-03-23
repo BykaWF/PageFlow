@@ -1,6 +1,7 @@
 package com.project.pageflow.controller;
 
 import com.project.pageflow.models.Book;
+import com.project.pageflow.models.Genre;
 import com.project.pageflow.service.BookService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,18 @@ public class BookController {
 
         return "library";
     }
+
+    @GetMapping("/library/{genreId}")
+    @PreAuthorize("isAuthenticated()")
+    public String getBookPageByGenre(Model model, @PathVariable("genreId") Integer genreId){
+        Genre genre = Genre.getGenreById(genreId);
+        List<Book> bookListByGenre = bookService.findByGenre(genre);
+
+        model.addAttribute("books", bookListByGenre);
+
+        return "genre-page";
+    }
+
 
     @GetMapping("/book/{id}")
     @PreAuthorize("isAuthenticated()")
