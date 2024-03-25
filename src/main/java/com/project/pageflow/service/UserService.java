@@ -2,15 +2,11 @@ package com.project.pageflow.service;
 
 import com.project.pageflow.models.SecuredUser;
 import com.project.pageflow.repository.UserRepository;
-import com.project.pageflow.util.Constant;
 import com.project.pageflow.util.authoritiesListProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import static com.project.pageflow.util.Constant.INVALID_USER_TYPE;
 
@@ -31,6 +27,7 @@ public class UserService implements UserDetailsService {
     public SecuredUser save(SecuredUser securedUser, String userType) {
         String encryptedPassword = passwordEncoder.encode(securedUser.getPassword());
         String authorities = authoritiesListProvider.getAuthorities(userType);
+
         if(authorities.equals(INVALID_USER_TYPE)) {
             return new SecuredUser();
         }
@@ -39,5 +36,9 @@ public class UserService implements UserDetailsService {
         securedUser.setPassword(encryptedPassword);
         return userRepository.save(securedUser);
 
+    }
+
+    public boolean isUsernameAvailable(SecuredUser securedUser) {
+        return loadUserByUsername(securedUser.getUsername()) == null;
     }
 }

@@ -13,7 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -34,10 +37,27 @@ public class PaymentMethodController {
 
     @PostMapping("/savePaymentMethod")
     @PreAuthorize("isAuthenticated()")
-    public String updateOrCreateAddress(@Valid PaymentMethodDto paymentMethodDto, Authentication authentication){
+    public String createPaymentMethod(@Valid PaymentMethodDto paymentMethodDto, Authentication authentication){
         PaymentMethod paymentMethod = paymentMethodDto.toPaymentMethod();
         paymentMethodService.createOrUpdateEntity(paymentMethod,studentService.getCurrentStudent(authentication));
 
+        return "redirect:/payment-info";
+    }
+
+    @PostMapping("/updatePaymentMethod")
+    @PreAuthorize("isAuthenticated()")
+    public String updatePaymentMethod(@ModelAttribute("paymentMethod") PaymentMethod paymentMethod, Authentication authentication){
+        Optional<PaymentMethod> oldPaymentMethod = paymentMethodService.findById(paymentMethod.getPaymentId());
+
+        if(oldPaymentMethod.isPresent()){
+            PaymentMethod updatedPaymentMethod = oldPaymentMethod.get();
+            updatedPaymentMethod.setCardHolderName(paymentMethod.getCardHolderName());
+            updatedPaymentMethod.setExpirationMonth(paymentMethod.getExpirationMonth());
+            updatedPaymentMethod.setCardNumber(paymentMethod.getCardNumber());
+            updatedPaymentMethod.setExpirationYear(paymentMethod.getExpirationYear());
+            updatedPaymentMethod.setType(paymentMethod.getType());
+            paymentMethodService.updatePaymentMethod(updatedPaymentMethod);
+        }
         return "redirect:/payment-info";
     }
 }

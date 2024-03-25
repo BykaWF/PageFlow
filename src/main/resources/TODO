@@ -1,4 +1,22 @@
 To-Do:
+    March 20,2024:
+        Add book genre logic
+        Add all related books when open book item
+        Add update logic for Payment Method and Address
+	Add visual search
+	Add Book Summarization and Analysis
+
+
+
+
+Completed Tasks:
+
+    March 21, 2024:
+        Added update logic for Payment Method and Address
+
+    March 19, 2024:
+        Added Exception Username exception
+
 
     March 14, 2024:
 
@@ -23,12 +41,6 @@ To-Do:
             If we don't have items to show in success page, redirect to something
             Add AI futures ( something basic, but with value)
             Update logic to all student-info
-
-
-
-
-
-Completed Tasks:
 
     March 14, 2024:
         Add orders controller
