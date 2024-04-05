@@ -68,6 +68,7 @@ public class SecurityConfig {
                                 .requestMatchers("/sing-up").permitAll()
                                 .requestMatchers("/static/**").permitAll()
                                 .requestMatchers("/library").authenticated()
+                                .requestMatchers("api/v1/speak").authenticated()
                                 .requestMatchers("/student-info").authenticated()
 
                 )

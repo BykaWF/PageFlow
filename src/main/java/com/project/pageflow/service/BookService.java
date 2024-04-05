@@ -47,4 +47,8 @@ public class BookService {
     public List<Book> getFromSearchBar(String query) {
         return bookRepository.searchFromBar(query);
     }
+
+    public List<Book> findByGenre(Genre genre) {
+        return bookRepository.findByGenre(genre);
+    }
 }

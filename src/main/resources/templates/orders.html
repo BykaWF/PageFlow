@@ -58,7 +58,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar Menu -->
-            <div class="col-lg-1 bg-light justify-content-center" style="margin-top: 80px;">
+            <div class="col-lg-3 col-md-4 bg-light" style="margin-top: 80px;">
                 <nav class="nav flex-column">
                     <a class="nav-link active" href="/student-info">Public Info</a>
                     <a class="nav-link" href="/payment-info">Payment Info</a>
@@ -68,36 +68,32 @@
             </div>
 
             <!-- Main Content -->
-            <div class="col-lg-9">
+            <div class="col-lg-9 col-md-8">
                 <section id="addressInfo" class="py-5">
                     <div class="container">
+                        <h2 class="fw-bold mb-3">Orders</h2>
 
-                        <div class="container">
-                            <h2 class="fw-bold mb-3">Orders</h2>
-
-                            <div th:each="order : ${orders}">
-                                <div class="card border-0 shadow-sm mb-4">
-                                    <div class="card-body">
-                                        <p class="lead text-muted mb-0">Transaction ID: <span th:text="${order.transactionId}"></span></p>
-                                        <p class="lead text-muted mb-0">Order Type: <span th:text="${order.orderType}"></span></p>
-                                        <p class="lead text-muted mb-0">Order Status: <span th:text="${order.orderStatus}"></span></p>
-                                        <p class="lead text-muted mb-0">Total Order: <span th:text="${order.totalOrder}"></span></p>
-                                    </div>
+                        <div th:each="order : ${orders}">
+                            <div class="card border-0 shadow-sm mb-4">
+                                <div class="card-body">
+                                    <p class="lead text-muted mb-0">Transaction ID: <span th:text="${order.transactionId}"></span></p>
+                                    <p class="lead text-muted mb-0">Order Type: <span th:text="${order.orderType}"></span></p>
+                                    <p class="lead text-muted mb-0">Order Status: <span th:text="${order.orderStatus}"></span></p>
+                                    <p class="lead text-muted mb-0">Total Order: <span th:text="${order.totalOrder}"></span></p>
                                 </div>
                             </div>
+                        </div>
 
-
-                            <div th:if="${#lists.isEmpty(orders)}">
-                                <p>You haven't placed any orders yet.</p>
-                            </div>
+                        <div th:if="${#lists.isEmpty(orders)}">
+                            <p>You haven't placed any orders yet.</p>
                         </div>
                     </div>
                 </section>
-
             </div>
         </div>
     </div>
 </section>
+
 
 
 <footer class="bg-dark py-4 mt-auto">
