@@ -51,6 +51,11 @@ public class BookController {
 
         if(bookOptional.isPresent()){
             Book book = bookOptional.get();
+
+            List<Book> byGenre = bookService.findByGenre(book.getGenre());
+            byGenre.remove(book);
+
+            model.addAttribute("relatedBooks", byGenre);
             model.addAttribute("book",book);
             model.addAttribute("message", "book fetched");
             return "book";
