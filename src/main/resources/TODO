@@ -1,16 +1,79 @@
 To-Do:
-    March 3, 2024:
-        Checkout logic:
-            Revisit transaction service
-            Provide new logic
-            Add to HTML page logic
+    March 20,2024:
+        Add book genre logic - V
+        Add all related books when open book item - V
+	Add visual search
+	Add Book Summarization and Analysis
+
 
 
 
 Completed Tasks:
 
+    March 21, 2024:
+        Added update logic for Payment Method and Address
+
+    March 19, 2024:
+        Added Exception Username exception
+
+
+    March 14, 2024:
+
+        TRANSACTION_SERVICE :
+            Add logic of address and payment method if it's exist, also solve problem with unique address
+            (if address and payment method isn't define setStudent ) / otherwise just used only for transaction and do not store it
+            -> it'll solve problem with unique value
+
+            // two checkout as who doesn't have a address and payment method
+            need logic like set or use as default
+
+        UI:
+            Make prettier account info page ( payment info and so on)
+
+
+        Payment Info , Address Info,  Student Info:
+            Add updating logic
+
+
+
+        Low Priority:
+            If we don't have items to show in success page, redirect to something
+            Add AI futures ( something basic, but with value)
+            Update logic to all student-info
+
+    March 14, 2024:
+        Add orders controller
+        TODO solve problem with
+        java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'paymentMethod' available as request attribute
+        	at org.springframework.web.servlet.support.BindStatus.<init>(BindStatus.java:153) ~[spring-webmvc-6.1.2.jar:6.1.2]
+        	at org.springframework.web.servlet.support.RequestContext.getBindStatus(RequestContext.java:926) ~[spring-webmvc-6.1.2.jar:6.1.2]
+
+        	use a Idea of /register
+
+
+    March 5, 2024:
+        logic to display a purchased items
+        and checkout page( do not show if we don't have items )
+        Add error page
+        Solve problem with displayed cartItems ( it worked before I change controller iml,
+        try to see in main what is the diff
+
+    March 4, 2024:
+        In cartItem change size of images
+        Add link to checkout page - /cart
+        Clear CartItems and ShoppingSession total (debug)
+        Save payment method and shipping address for a student
+        Add to controller check about OrderStatus ( it will help us do not show a page with success if we don't have a success)
+        Set up address to student and shipping address to student also  ? may be the same for payment method
+
+    NOTE: Today I got a new error: "No EntityManager with actual transaction available for current thread"
+          To solve it I've used @Transaction annotation, but need to read how work with transactional management
+
     March 3, 2024:
         Delete Item from /cart
+        Revisit transaction service
+        Provide new logic
+        Add to HTML page logic
 
     March 2, 2024:
         Change quantity in /cart
