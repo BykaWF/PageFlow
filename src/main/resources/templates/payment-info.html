@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>PAGE&FLOW</title>
+    <!-- Favicon-->
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{styles/styles-bot.css}" rel="stylesheet" />
+</head>
+
+<body class="d-flex flex-column">
+<!--Navigation bar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="/library">PAGE&FLOW</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="https://yaprozorov.super.site/">Contact</a></li>
+            </ul>
+            <form class="d-flex align-items-center me-2"> <!-- Add align-items-center class for centering -->
+                <a href="/student-info" class="btn btn-outline-dark d-flex align-items-center">
+                    <i class="bi bi-person-badge-fill"></i>
+                    Account
+                </a>
+            </form>
+            <form class="d-flex align-items-center me-2"> <!-- Add align-items-center class for centering -->
+                <a href="/cart" class="btn btn-outline-dark d-flex align-items-center">
+                    <i class="bi-cart-fill me-1 "></i>
+                    Cart
+                </a>
+            </form>
+
+        </div>
+    </div>
+</nav>
+<header class="py-2">
+    <div class="container px-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xxl-6">
+                <div class="text-center my-5">
+                    <h1 class="fw-bolder mb-3">Account Information</h1>
+                    <img class="rounded-circle me-1" th:src="@{images/blank-200x200.jpg}" alt="..." />
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!--User Info Name-->
+
+<section class="py-5 bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Menu -->
+            <div class="col-lg-3 col-md-4 col-sm-12 bg-light" style="margin-top: 80px;">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="/student-info">Public Info</a>
+                    <a class="nav-link" href="/payment-info">Payment Info</a>
+                    <a class="nav-link" href="/address">Address</a>
+                    <a class="nav-link" href="/orders">Orders</a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9 col-md-8 col-sm-12">
+                <section id="paymentInfo" class="py-5">
+                    <div class="container">
+                        <div th:if="${paymentMethod == null}">
+                            <!-- Payment Method Form -->
+                            <form th:action="@{/savePaymentMethod}" method="post">
+                                <div class="form-group">
+                                    <label for="type">Payment Type:</label>
+                                    <select class="form-control" id="type" name="type">
+                                        <option value="CREDIT_CARD">Credit Card</option>
+                                        <option value="DEBIT_CARD">Debit Card</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="cardNumber">Card Number:</label>
+                                    <input type="text" class="form-control" id="cardNumber" name="cardNumber">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="cardHolderName">Card Holder Name:</label>
+                                    <input type="text" class="form-control" id="cardHolderName" name="cardHolderName">
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="expirationMonth">Expiration Month:</label>
+                                        <input type="number" class="form-control" id="expirationMonth" name="expirationMonth" >
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="expirationYear">Expiration Year:</label>
+                                        <input type="number" class="form-control" id="expirationYear" name="expirationYear">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Save Payment Method</button>
+                            </form>
+                        </div>
+
+                        <div th:if="${paymentMethod != null}">
+                            <!-- Display existing payment method details -->
+                            <form th:action="@{/updatePaymentMethod}" th:object="${paymentMethod}" method="post">
+                                <input type="hidden" id="paymentId" th:field="${paymentMethod.paymentId}" >
+                                <div class="container">
+                                    <div class="py-3">
+                                        <div class="form-group">
+                                            <label for="paymentTypeNotNull">Payment Type:</label>
+                                            <select class="form-control" id="paymentTypeNotNull" th:field="${paymentMethod.type}">
+                                                <option value="CREDIT_CARD" th:selected="${paymentMethod.type == 'CREDIT_CARD'}">Credit Card</option>
+                                                <option value="DEBIT_CARD" th:selected="${paymentMethod.type == 'DEBIT_CARD'}">Debit Card</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cardNumberNotNull">Card Number:</label>
+                                            <input type="text" class="form-control" id="cardNumberNotNull" th:field="${paymentMethod.cardNumber}" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cardHolderNameNotNull">Cardholder Name:</label>
+                                            <input type="text" class="form-control" id="cardHolderNameNotNull" th:field="${paymentMethod.cardHolderName}" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="expirationMonthNotNull">Expiration Month:</label>
+                                            <input type="text" class="form-control" id="expirationMonthNotNull" th:field="${paymentMethod.expirationMonth}" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="expirationYearNotNull">Expiration Year:</label>
+                                            <input type="text" class="form-control" id="expirationYearNotNull" th:field="${paymentMethod.expirationYear}" >
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<footer class="bg-dark py-4 mt-auto">
+    <div class="container px-5">
+        <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+            <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; PAGE&FLOW 2024</div></div>
+            <div class="col-auto">
+                <a class="link-light small" href="https://yaprozorov.super.site/">Contact</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+<!--<script th:src="@{scripts/main.js}" type="module"></script>-->
+</body>
+
+</html>

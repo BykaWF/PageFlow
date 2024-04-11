@@ -4,6 +4,7 @@
 package com.project.pageflow.controller;
 
 import com.project.pageflow.dto.CreateStudentRequest;
+import com.project.pageflow.excetption.UsernameIsNotAvailableException;
 import com.project.pageflow.models.Student;
 import com.project.pageflow.service.StudentService;
 import jakarta.validation.Valid;
@@ -40,13 +41,15 @@ public class AuthController {
      */
     @PostMapping("/register")
     public String register(@Valid CreateStudentRequest createStudentRequest, Model model) {
+
+        Student student = createStudentRequest.toStudent();
+
         try {
-            Student student = createStudentRequest.toStudent();
             studentService.createStudent(student);
             model.addAttribute("message", "Registration successful");
             return "registration-success";
-        } catch (DataIntegrityViolationException e) {
-            model.addAttribute("error", "User with this username/email already exists");
+        } catch (UsernameIsNotAvailableException e) {
+            model.addAttribute("error", "User with this username already exists " + student.getSecuredUser().getUsername());
             return "sing-up";
         } catch (Exception e) {
             model.addAttribute("error", "An error occurred during registration");

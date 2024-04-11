@@ -14,4 +14,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
             "to_tsvector(b.title || ' ' || b.discription) @@ phraseto_tsquery(:query)",
             nativeQuery = true)
     List<Book> searchFromBar(String query);
+
+    List<Book> findByGenre(Genre genre);
 }

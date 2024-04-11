@@ -37,10 +37,6 @@ public class Transaction {
     @ManyToOne
     private Admin admin;
 
-    @OneToMany
-    @JoinColumn
-    private List<CartItem> cartItems;
-
     @ManyToOne
     private PaymentMethod paymentMethod;
 

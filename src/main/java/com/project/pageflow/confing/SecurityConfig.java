@@ -3,6 +3,7 @@
  */
 package com.project.pageflow.confing;
 
+
 import com.project.pageflow.repository.StudentRepository;
 import com.project.pageflow.repository.UserRepository;
 import com.project.pageflow.service.ShoppingSessionService;
@@ -31,6 +32,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 @Configuration
 @EnableWebSecurity
@@ -65,6 +68,7 @@ public class SecurityConfig {
                                 .requestMatchers("/sing-up").permitAll()
                                 .requestMatchers("/static/**").permitAll()
                                 .requestMatchers("/library").authenticated()
+                                .requestMatchers("api/v1/speak").authenticated()
                                 .requestMatchers("/student-info").authenticated()
 
                 )
@@ -83,6 +87,8 @@ public class SecurityConfig {
                 )
                 .build();
     }
+
+
     @Bean
     public ShoppingSessionSuccessHandler shoppingSessionSuccessHandler(){
         return new ShoppingSessionSuccessHandler(shoppingSessionService,studentService());

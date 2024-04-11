@@ -40,10 +40,10 @@ public class Student {
     @OneToOne(mappedBy = "student")
     private ShoppingSession shoppingSession;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<ShippingAddress> shippingAddress;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student" ,cascade = CascadeType.ALL)
     private List<PaymentMethod> paymentMethods;
 
     @OneToOne
