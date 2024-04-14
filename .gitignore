@@ -22,6 +22,9 @@ target/
 *.yaml
 *.properties
 
+compose.yaml
+application.properties
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
