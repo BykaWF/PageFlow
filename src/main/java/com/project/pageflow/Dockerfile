@@ -1,9 +1,3 @@
-FROM eclipse-temurin:21-jdk as build
-COPY ../java /app
-WORKDIR /app
-RUN ./mvnw --no-transfer-progress clean package -DskipTests
-RUN mv -f target/*.jar app.jar
-
 FROM eclipse-temurin:21-jre
 ARG PORT
 ENV PORT=${PORT}

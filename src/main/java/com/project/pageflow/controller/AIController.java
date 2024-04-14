@@ -1,12 +1,7 @@
 package com.project.pageflow.controller;
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.huggingface.HuggingfaceChatClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,8 +16,8 @@ public class AIController {
 
     private final String API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
 
-    @Value("${TOKEN}")
-    private String TOKEN;
+//    @Value("${TOKEN}")
+    private String TOKEN = "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";
 
     @PostMapping("/speak")
     public String speakWithModel(@RequestBody String input) {
