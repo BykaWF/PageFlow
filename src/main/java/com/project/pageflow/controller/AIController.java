@@ -2,6 +2,7 @@ package com.project.pageflow.controller;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,8 +17,8 @@ public class AIController {
 
     private final String API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
 
-//    @Value("${TOKEN}")
-    private String TOKEN = "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";
+    @Value("${TOKEN}")
+    private String TOKEN;
 
     @PostMapping("/speak")
     public String speakWithModel(@RequestBody String input) {

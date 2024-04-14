@@ -10,10 +10,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/page_flow
       SPRING_DATASOURCE_USERNAME: yaroslav
       SPRING_DATASOURCE_PASSWORD: test
-    develop:
-      watch:
-        - action: rebuild
-          path: .
+      TOKEN: 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
+
   db:
     image: postgres
     environment:
