@@ -66,6 +66,25 @@ RUN java -Djarmode=layertools -jar target/app.jar extract --destination target/e
 # eclipse-temurin@sha256:99cede493dfd88720b610eb8077c8688d3cca50003d76d1d539b0efc8cca72b4.
 FROM eclipse-temurin:21-jre-jammy AS final
 
+# Railway-specific modifications:
+
+# Notify Railway about using the Dockerfile
+RUN echo "=========================="
+RUN echo "Using detected Dockerfile!"
+RUN echo "=========================="
+
+# Set custom Dockerfile path for Railway
+ENV RAILWAY_DOCKERFILE_PATH=/build/Dockerfile
+
+# Using variables at build time
+# Set necessary environment variables
+ARG RAILWAY_SERVICE_NAME
+ARG RAILWAY_ENVIRONMENT
+
+# Cache mounts for Railway
+# Replace <service id> with the id of the service provided by Railway
+RUN --mount=type=cache,id=s/fc7be644-5004-46a1-a0d1-693f053d3da9-/root/cache/pip,target=/root/.cache/pip
+
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
 ARG UID=10001
