@@ -21,7 +21,8 @@ COPY .mvn/ .mvn/
 # Leverage a cache mount to /root/.m2 so that subsequent builds don't have to
 # re-download packages.
 RUN --mount=type=bind,source=pom.xml,target=pom.xml \
-    --mount=type=cache,target=/root/.m2 ./mvnw dependency:go-offline -DskipTests
+    --mount=type=cache,id=maven-cache,target=/root/.m2 ./mvnw dependency:go-offline -DskipTests
+
 
 ################################################################################
 
@@ -37,7 +38,7 @@ WORKDIR /build
 
 COPY ./src src/
 RUN --mount=type=bind,source=pom.xml,target=pom.xml \
-    --mount=type=cache,target=/root/.m2 \
+    --mount=type=cache,id=maven-cache,target=/root/.m2 \
     ./mvnw package -DskipTests && \
     mv target/$(./mvnw help:evaluate -Dexpression=project.artifactId -q -DforceStdout)-$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout).jar target/app.jar
 
