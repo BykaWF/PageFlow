@@ -24,7 +24,6 @@ RUN --mount=type=bind,source=pom.xml,target=pom.xml \
     --mount=type=cache,id=maven-cache,target=/root/.m2 ./mvnw dependency:go-offline -DskipTests
 
 
-
 ################################################################################
 
 # Create a stage for building the application based on the stage with downloaded dependencies.
