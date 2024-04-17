@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+
+  server:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:sKozIeECxHSzgdtEGFsswCeWWggrSLMu@monorail.proxy.rlwy.net:53154/railway
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: sKozIeECxHSzgdtEGFsswCeWWggrSLMu
+#      TOKEN: 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
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: page_flow
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sKozIeECxHSzgdtEGFsswCeWWggrSLMu
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+     - "5433:5432"
+    healthcheck:
+      test: ["CMD", "sh", "-c", "pg_isready -U $$POSTGRES_USER -h $$(hostname -i)"]
+      interval: 10s
+      timeout: 15s
+      retries: 3
+
+volumes:
+  db-data:
