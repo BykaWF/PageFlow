@@ -18,14 +18,14 @@ public class AIController {
     private final String API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
 
     @Value("${TOKEN}")
-    private String TOKEN;
+    private String token;
 
     @PostMapping("/speak")
     public String speakWithModel(@RequestBody String input) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", TOKEN);
+        headers.set("Authorization", token);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> requestEntity = new HttpEntity<>(input, headers);
