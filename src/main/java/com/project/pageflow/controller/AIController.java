@@ -17,7 +17,7 @@ public class AIController {
 
     private final String API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
 
-    @Value("${TOKEN}")
+    @Value("${TOKEN_PROD}")
     private String token;
 
     @PostMapping("/speak")
