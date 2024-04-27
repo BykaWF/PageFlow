@@ -121,32 +121,32 @@
                 </div>
                 <script>
                     document.getElementById('aiForm').addEventListener('submit', function(event) {
-                        event.preventDefault();
-                        var userQuery = document.getElementById('userQuery').value;
-                        var loadingSpinner = document.getElementById('loadingSpinner');
-                        var aiResponse = document.getElementById('aiResponse');
+                             event.preventDefault();
+                             var userQuery = document.getElementById('userQuery').value;
+                             var loadingSpinner = document.getElementById('loadingSpinner');
+                             var aiResponse = document.getElementById('aiResponse');
 
-                        loadingSpinner.style.display = 'block';
-                        fetch('/api/v1/speak', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ inputs: userQuery }),
-                        })
-                        .then(response => response.text())
-                        .then(data => {
+                             loadingSpinner.style.display = 'block';
+                             fetch('/api/v1/ai/generate', {
+                                 method: 'POST',
+                                 headers: {
+                                     'Content-Type': 'application/json',
+                                 },
+                                  body: JSON.stringify({ message: userQuery }),                             })
+                             .then(response => response.text())
+                             .then(data => {
 
-                            loadingSpinner.style.display = 'none';
+                                 loadingSpinner.style.display = 'none';
 
-                            aiResponse.innerHTML += '<p><strong>AI replied:</strong> ' + data + '</p>';
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
+                                 aiResponse.innerHTML += '<p><strong>AI replied:</strong> ' + data + '</p>';
+                             })
+                             .catch((error) => {
+                                 console.error('Error:', error);
 
-                            loadingSpinner.style.display = 'none';
-                        });
-                    });
+                                 loadingSpinner.style.display = 'none';
+                             });
+                         });
+
                 </script>
                 <form th:action="@{/new-item}" method="post">
                     <!-- Existing form content -->
