@@ -54,6 +54,9 @@ public class AIController {
 
         String responseBody = responseEntity.getBody();
 
+        // Debug statement
+        System.out.println("Response Body: " + responseBody);
+
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode root = mapper.readTree(responseBody);
